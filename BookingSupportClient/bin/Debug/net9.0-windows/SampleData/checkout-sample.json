@@ -1,0 +1,13 @@
+{
+  "checkoutReference": "SECURE-20260420-001",
+  "customerName": "Kiss Anna",
+  "customerContact": "anna.kiss@example.com",
+  "productCode": "JET2-HOLIDAY-PARIS",
+  "bookingDate": "2026-04-20T00:00:00",
+  "selectedDate": "2026-06-15T00:00:00",
+  "status": "CheckoutCompleted",
+  "checkoutAmount": 249900,
+  "currency": "HUF",
+  "paymentStatus": "Paid",
+  "transactionDateUtc": "2026-04-20T08:30:00Z"
+}
