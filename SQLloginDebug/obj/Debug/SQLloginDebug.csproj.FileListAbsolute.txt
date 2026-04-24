@@ -1,0 +1,7 @@
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\bin\Debug\SQLloginDebug.exe.config
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\bin\Debug\SQLloginDebug.exe
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\bin\Debug\SQLloginDebug.pdb
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\obj\Debug\SQLloginDebug.csproj.AssemblyReference.cache
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\obj\Debug\SQLloginDebug.csproj.CoreCompileInputs.cache
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\obj\Debug\SQLloginDebug.exe
+C:\Users\tmiki\source\repos\hotcakes-commerce-core\SQLloginDebug\obj\Debug\SQLloginDebug.pdb
