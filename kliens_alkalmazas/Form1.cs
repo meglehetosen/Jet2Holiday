@@ -83,41 +83,47 @@ namespace kliens_alkalmazas
 
             var selectedStatus = comboBox1.SelectedItem?.ToString() ?? AllStatus;
 
-            var query = jet2HolidayContext.Foglalas
-                .Where(f => f.UserId == selectedUser.UserId)
-                .OrderBy(f => f.FoglalasId);
+            IQueryable<Models.Foglala> query = jet2HolidayContext.Foglalas
+                .Where(f => f.UserId == selectedUser.UserId);
 
             if (!string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase))
             {
-                query = (IOrderedQueryable<Models.Foglala>)query.Where(f => f.Status == selectedStatus);
+                query = query.Where(f => f.Status == selectedStatus);
             }
 
-            var foglalasok = string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase)
-                ? query.Take(10)
-                : query;
+            query = query.OrderBy(f => f.FoglalasId);
 
-            foglalaBindingSource.DataSource = foglalasok
-                .Select(f => new FoglalasClass
-                {
-                    FoglalasId = f.FoglalasId,
-                    UserId = f.UserId,
-                    ProductBvin = f.ProductBvin,
-                    Telefon = f.Telefon,
-                    Lokacio = f.Lokacio,
-                    ErkezesDatum = f.ErkezesDatum,
-                    TavozasDatum = f.TavozasDatum,
-                    VendegSzam = f.VendegSzam,
-                    LetrehozasDatuma = f.LetrehozasDatuma,
-                    Status = f.Status,
-                    IsCancelled = f.IsCancelled,
-                    CancellationReason = f.CancellationReason,
-                    LastModifiedDate = f.LastModifiedDate,
-                    HandledByUserId = f.HandledByUserId,
-                    BookingReference = f.BookingReference,
-                    EjszakakSzama = f.EjszakakSzama,
-                    OrderBvin = f.OrderBvin
-                })
-                .ToList();
+            if (string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Take(10);
+            }
+
+            var foglalasok = (from f in query
+                              join u in jet2HolidayContext.Users on f.UserId equals u.UserId
+                              select new FoglalasClass
+                              {
+                                  FoglalasId = f.FoglalasId,
+                                  UserId = f.UserId,
+                                  ProductBvin = f.ProductBvin,
+                                  Telefon = f.Telefon,
+                                  Lokacio = f.Lokacio,
+                                  ErkezesDatum = f.ErkezesDatum,
+                                  TavozasDatum = f.TavozasDatum,
+                                  VendegSzam = f.VendegSzam,
+                                  LetrehozasDatuma = f.LetrehozasDatuma,
+                                  Status = f.Status,
+                                  IsCancelled = f.IsCancelled,
+                                  CancellationReason = f.CancellationReason,
+                                  LastModifiedDate = f.LastModifiedDate,
+                                  HandledByUserId = f.HandledByUserId,
+                                  BookingReference = f.BookingReference,
+                                  EjszakakSzama = f.EjszakakSzama,
+                                  OrderBvin = f.OrderBvin,
+                                  Email = u.Email,
+                                  Nev = u.DisplayName
+                              }).ToList();
+
+            foglalaBindingSource.DataSource = foglalasok;
         }
 
         private void LoadDefaultUsers()
@@ -129,6 +135,53 @@ namespace kliens_alkalmazas
                 .ToList();
 
             userBindingSource.DataSource = defaultUsers;
+        }
+
+        private void buttonAddNewBooking_Click(object sender, EventArgs e)
+        {
+            var uj = new FoglalasClass
+            {
+                Status = "Pending",
+                LetrehozasDatuma = DateTime.Now
+            };
+
+            if (listBoxUser.SelectedItem is Models.User selectedUser)
+            {
+                uj.UserId = selectedUser.UserId;
+                uj.Nev = selectedUser.DisplayName;
+                uj.Email = selectedUser.Email;
+            }
+
+            using var fan = new FormAdd(uj);
+
+            if (fan.ShowDialog() == DialogResult.OK)
+            {
+                var entity = new Models.Foglala
+                {
+                    FoglalasId = fan.ujFoglalas.FoglalasId,
+                    UserId = fan.ujFoglalas.UserId,
+                    ProductBvin = fan.ujFoglalas.ProductBvin,
+                    Telefon = fan.ujFoglalas.Telefon,
+                    Lokacio = fan.ujFoglalas.Lokacio,
+                    ErkezesDatum = fan.ujFoglalas.ErkezesDatum,
+                    TavozasDatum = fan.ujFoglalas.TavozasDatum,
+                    VendegSzam = fan.ujFoglalas.VendegSzam,
+                    LetrehozasDatuma = fan.ujFoglalas.LetrehozasDatuma,
+                    Status = fan.ujFoglalas.Status,
+                    IsCancelled = fan.ujFoglalas.IsCancelled,
+                    CancellationReason = fan.ujFoglalas.CancellationReason,
+                    LastModifiedDate = fan.ujFoglalas.LastModifiedDate,
+                    HandledByUserId = fan.ujFoglalas.HandledByUserId,
+                    BookingReference = fan.ujFoglalas.BookingReference,
+                    EjszakakSzama = fan.ujFoglalas.EjszakakSzama,
+                    OrderBvin = fan.ujFoglalas.OrderBvin
+                };
+
+                jet2HolidayContext.Foglalas.Add(entity);
+                jet2HolidayContext.SaveChanges();
+
+                RefreshFoglalasGridBySelectedUser();
+            }
         }
     }
 }

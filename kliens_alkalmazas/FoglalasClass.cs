@@ -25,5 +25,7 @@ namespace kliens_alkalmazas
         public string? BookingReference { get; set; }
         public int? EjszakakSzama { get; set; }
         public Guid? OrderBvin { get; set; }
+        public string? Email { get; set; }
+        public string? Nev { get; set; }
     }
 }
