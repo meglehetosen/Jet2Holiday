@@ -55,6 +55,11 @@
             textBoxUserFilter = new TextBox();
             label1 = new Label();
             comboBox1 = new ComboBox();
+            label2 = new Label();
+            buttonAddNewBooking = new Button();
+            buttonEditBooking = new Button();
+            buttonDeleteBooking = new Button();
+            buttonExit = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).BeginInit();
@@ -72,7 +77,7 @@
             dataGridView1.Location = new Point(316, 138);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1429, 853);
+            dataGridView1.Size = new Size(1425, 819);
             dataGridView1.TabIndex = 0;
             // 
             // foglalasIdDataGridViewTextBoxColumn
@@ -242,14 +247,14 @@
             listBoxUser.FormattingEnabled = true;
             listBoxUser.Location = new Point(12, 138);
             listBoxUser.Name = "listBoxUser";
-            listBoxUser.Size = new Size(298, 844);
+            listBoxUser.Size = new Size(298, 784);
             listBoxUser.TabIndex = 1;
             listBoxUser.ValueMember = "UserId";
             listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
             // 
             // textBoxUserFilter
             // 
-            textBoxUserFilter.Location = new Point(12, 33);
+            textBoxUserFilter.Location = new Point(12, 38);
             textBoxUserFilter.Name = "textBoxUserFilter";
             textBoxUserFilter.Size = new Size(298, 27);
             textBoxUserFilter.TabIndex = 2;
@@ -258,25 +263,85 @@
             // label1
             // 
             label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 11F);
             label1.Location = new Point(12, 10);
             label1.Name = "label1";
-            label1.Size = new Size(139, 20);
+            label1.Size = new Size(178, 25);
             label1.TabIndex = 3;
             label1.Text = "Keresés név alapján";
             // 
             // comboBox1
             // 
             comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(362, 33);
+            comboBox1.Location = new Point(362, 38);
             comboBox1.Name = "comboBox1";
             comboBox1.Size = new Size(218, 28);
             comboBox1.TabIndex = 4;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F);
+            label2.Location = new Point(362, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(71, 25);
+            label2.TabIndex = 5;
+            label2.Text = "Státusz";
+            // 
+            // buttonAddNewBooking
+            // 
+            buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
+            buttonAddNewBooking.Location = new Point(852, 9);
+            buttonAddNewBooking.Name = "buttonAddNewBooking";
+            buttonAddNewBooking.Size = new Size(219, 111);
+            buttonAddNewBooking.TabIndex = 6;
+            buttonAddNewBooking.Text = "Új foglalás létrehozása";
+            buttonAddNewBooking.UseVisualStyleBackColor = true;
+            // 
+            // buttonEditBooking
+            // 
+            buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditBooking.Font = new Font("Segoe UI", 11F);
+            buttonEditBooking.Location = new Point(1130, 9);
+            buttonEditBooking.Name = "buttonEditBooking";
+            buttonEditBooking.Size = new Size(222, 111);
+            buttonEditBooking.TabIndex = 7;
+            buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
+            buttonEditBooking.UseVisualStyleBackColor = true;
+            // 
+            // buttonDeleteBooking
+            // 
+            buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
+            buttonDeleteBooking.Location = new Point(1411, 9);
+            buttonDeleteBooking.Name = "buttonDeleteBooking";
+            buttonDeleteBooking.Size = new Size(210, 111);
+            buttonDeleteBooking.TabIndex = 8;
+            buttonDeleteBooking.Text = "Foglalás törlése";
+            buttonDeleteBooking.UseVisualStyleBackColor = true;
+            // 
+            // buttonExit
+            // 
+            buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonExit.Font = new Font("Segoe UI", 11F);
+            buttonExit.Location = new Point(83, 942);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(166, 75);
+            buttonExit.TabIndex = 9;
+            buttonExit.Text = "Kilépés";
+            buttonExit.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1748, 1033);
+            ClientSize = new Size(1744, 1037);
+            Controls.Add(buttonExit);
+            Controls.Add(buttonDeleteBooking);
+            Controls.Add(buttonEditBooking);
+            Controls.Add(buttonAddNewBooking);
+            Controls.Add(label2);
             Controls.Add(comboBox1);
             Controls.Add(label1);
             Controls.Add(textBoxUserFilter);
@@ -322,5 +387,10 @@
         private DataGridViewTextBoxColumn orderBvinDataGridViewTextBoxColumn;
         private Label label1;
         private ComboBox comboBox1;
+        private Label label2;
+        private Button buttonAddNewBooking;
+        private Button buttonEditBooking;
+        private Button buttonDeleteBooking;
+        private Button buttonExit;
     }
 }

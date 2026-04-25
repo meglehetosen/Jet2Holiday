@@ -2,15 +2,15 @@ namespace kliens_alkalmazas
 {
     public partial class Form1 : Form
     {
-        Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
+        private const string AllStatus = "All";
+        private readonly Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
+
         public Form1()
         {
             InitializeComponent();
 
             LoadDefaultUsers();
 
-            foglalaBindingSource.DataSource = jet2HolidayContext.Foglalas.ToList();
-            userBindingSource.DataSource = jet2HolidayContext.Users.ToList();
             hccOrderBindingSource.DataSource = jet2HolidayContext.HccOrders.ToList();
             hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts.ToList();
 
@@ -26,9 +26,14 @@ namespace kliens_alkalmazas
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            comboBox1.Items.Add("All");
+            comboBox1.Items.Clear();
+            comboBox1.Items.Add(AllStatus);
             comboBox1.Items.Add("Pending");
+            comboBox1.Items.Add("Confirmed");
+            comboBox1.Items.Add("Cancelled");
 
+            comboBox1.SelectedIndexChanged += comboBox1_SelectedIndexChanged;
+            comboBox1.SelectedIndex = 0;
         }
 
         private void textBoxUserFilter_TextChanged(object sender, EventArgs e)
@@ -52,8 +57,10 @@ namespace kliens_alkalmazas
             }
             else
             {
-                foglalaBindingSource.DataSource = new List<Models.Foglala>();
+                foglalaBindingSource.DataSource = new List<FoglalasClass>();
             }
+
+            RefreshFoglalasGridBySelectedUser();
         }
 
         private void listBoxUser_SelectedIndexChanged(object sender, EventArgs e)
@@ -61,20 +68,56 @@ namespace kliens_alkalmazas
             RefreshFoglalasGridBySelectedUser();
         }
 
+        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RefreshFoglalasGridBySelectedUser();
+        }
+
         private void RefreshFoglalasGridBySelectedUser()
         {
-            if (listBoxUser.SelectedItem is Models.User selectedUser)
+            if (listBoxUser.SelectedItem is not Models.User selectedUser)
             {
-                var foglalasok = jet2HolidayContext.Foglalas
-                    .Where(f => f.UserId == selectedUser.UserId)
-                    .ToList();
+                foglalaBindingSource.DataSource = new List<FoglalasClass>();
+                return;
+            }
 
-                foglalaBindingSource.DataSource = foglalasok;
-            }
-            else
+            var selectedStatus = comboBox1.SelectedItem?.ToString() ?? AllStatus;
+
+            var query = jet2HolidayContext.Foglalas
+                .Where(f => f.UserId == selectedUser.UserId)
+                .OrderBy(f => f.FoglalasId);
+
+            if (!string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase))
             {
-                foglalaBindingSource.DataSource = new List<Models.Foglala>();
+                query = (IOrderedQueryable<Models.Foglala>)query.Where(f => f.Status == selectedStatus);
             }
+
+            var foglalasok = string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase)
+                ? query.Take(10)
+                : query;
+
+            foglalaBindingSource.DataSource = foglalasok
+                .Select(f => new FoglalasClass
+                {
+                    FoglalasId = f.FoglalasId,
+                    UserId = f.UserId,
+                    ProductBvin = f.ProductBvin,
+                    Telefon = f.Telefon,
+                    Lokacio = f.Lokacio,
+                    ErkezesDatum = f.ErkezesDatum,
+                    TavozasDatum = f.TavozasDatum,
+                    VendegSzam = f.VendegSzam,
+                    LetrehozasDatuma = f.LetrehozasDatuma,
+                    Status = f.Status,
+                    IsCancelled = f.IsCancelled,
+                    CancellationReason = f.CancellationReason,
+                    LastModifiedDate = f.LastModifiedDate,
+                    HandledByUserId = f.HandledByUserId,
+                    BookingReference = f.BookingReference,
+                    EjszakakSzama = f.EjszakakSzama,
+                    OrderBvin = f.OrderBvin
+                })
+                .ToList();
         }
 
         private void LoadDefaultUsers()
