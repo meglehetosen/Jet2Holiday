@@ -30,21 +30,9 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
-            userBindingSource = new BindingSource(components);
-            foglalaBindingSource = new BindingSource(components);
-            hccProductBindingSource = new BindingSource(components);
-            hccOrderBindingSource = new BindingSource(components);
-            listBoxUser = new ListBox();
-            textBoxUserFilter = new TextBox();
-            label1 = new Label();
-            comboBox1 = new ComboBox();
-            label2 = new Label();
-            buttonAddNewBooking = new Button();
-            buttonEditBooking = new Button();
-            buttonDeleteBooking = new Button();
-            buttonExit = new Button();
             foglalasIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             userIdDataGridViewTextBoxColumn = new DataGridViewComboBoxColumn();
+            userBindingSource = new BindingSource(components);
             productBvinDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             telefonDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             lokacioDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -61,6 +49,18 @@
             ejszakakSzamaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             orderBvinDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             Email = new DataGridViewTextBoxColumn();
+            foglalaBindingSource = new BindingSource(components);
+            hccProductBindingSource = new BindingSource(components);
+            hccOrderBindingSource = new BindingSource(components);
+            listBoxUser = new ListBox();
+            textBoxUserFilter = new TextBox();
+            label1 = new Label();
+            comboBox1 = new ComboBox();
+            label2 = new Label();
+            buttonAddNewBooking = new Button();
+            buttonEditBooking = new Button();
+            buttonDeleteBooking = new Button();
+            buttonExit = new Button();
             Nev = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
@@ -71,6 +71,8 @@
             // 
             // dataGridView1
             // 
+            dataGridView1.AllowUserToAddRows = false;
+            dataGridView1.AllowUserToDeleteRows = false;
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -78,17 +80,188 @@
             dataGridView1.DataSource = foglalaBindingSource;
             dataGridView1.Location = new Point(316, 138);
             dataGridView1.Name = "dataGridView1";
+            dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1425, 819);
+            dataGridView1.Size = new Size(1393, 822);
             dataGridView1.TabIndex = 0;
+            // 
+            // foglalasIdDataGridViewTextBoxColumn
+            // 
+            foglalasIdDataGridViewTextBoxColumn.DataPropertyName = "FoglalasId";
+            foglalasIdDataGridViewTextBoxColumn.HeaderText = "FoglalasId";
+            foglalasIdDataGridViewTextBoxColumn.MinimumWidth = 6;
+            foglalasIdDataGridViewTextBoxColumn.Name = "foglalasIdDataGridViewTextBoxColumn";
+            foglalasIdDataGridViewTextBoxColumn.ReadOnly = true;
+            foglalasIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
+            foglalasIdDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // userIdDataGridViewTextBoxColumn
+            // 
+            userIdDataGridViewTextBoxColumn.DataPropertyName = "UserId";
+            userIdDataGridViewTextBoxColumn.DataSource = userBindingSource;
+            userIdDataGridViewTextBoxColumn.DisplayMember = "DisplayName";
+            userIdDataGridViewTextBoxColumn.HeaderText = "UserId";
+            userIdDataGridViewTextBoxColumn.MinimumWidth = 6;
+            userIdDataGridViewTextBoxColumn.Name = "userIdDataGridViewTextBoxColumn";
+            userIdDataGridViewTextBoxColumn.ReadOnly = true;
+            userIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
+            userIdDataGridViewTextBoxColumn.SortMode = DataGridViewColumnSortMode.Automatic;
+            userIdDataGridViewTextBoxColumn.ValueMember = "UserId";
+            userIdDataGridViewTextBoxColumn.Width = 125;
             // 
             // userBindingSource
             // 
             userBindingSource.DataSource = typeof(Models.User);
             // 
+            // productBvinDataGridViewTextBoxColumn
+            // 
+            productBvinDataGridViewTextBoxColumn.DataPropertyName = "ProductBvin";
+            productBvinDataGridViewTextBoxColumn.HeaderText = "ProductBvin";
+            productBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
+            productBvinDataGridViewTextBoxColumn.Name = "productBvinDataGridViewTextBoxColumn";
+            productBvinDataGridViewTextBoxColumn.ReadOnly = true;
+            productBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
+            productBvinDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // telefonDataGridViewTextBoxColumn
+            // 
+            telefonDataGridViewTextBoxColumn.DataPropertyName = "Telefon";
+            telefonDataGridViewTextBoxColumn.HeaderText = "Telefon";
+            telefonDataGridViewTextBoxColumn.MinimumWidth = 6;
+            telefonDataGridViewTextBoxColumn.Name = "telefonDataGridViewTextBoxColumn";
+            telefonDataGridViewTextBoxColumn.ReadOnly = true;
+            telefonDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // lokacioDataGridViewTextBoxColumn
+            // 
+            lokacioDataGridViewTextBoxColumn.DataPropertyName = "Lokacio";
+            lokacioDataGridViewTextBoxColumn.HeaderText = "Lokacio";
+            lokacioDataGridViewTextBoxColumn.MinimumWidth = 6;
+            lokacioDataGridViewTextBoxColumn.Name = "lokacioDataGridViewTextBoxColumn";
+            lokacioDataGridViewTextBoxColumn.ReadOnly = true;
+            lokacioDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // erkezesDatumDataGridViewTextBoxColumn
+            // 
+            erkezesDatumDataGridViewTextBoxColumn.DataPropertyName = "ErkezesDatum";
+            erkezesDatumDataGridViewTextBoxColumn.HeaderText = "ErkezesDatum";
+            erkezesDatumDataGridViewTextBoxColumn.MinimumWidth = 6;
+            erkezesDatumDataGridViewTextBoxColumn.Name = "erkezesDatumDataGridViewTextBoxColumn";
+            erkezesDatumDataGridViewTextBoxColumn.ReadOnly = true;
+            erkezesDatumDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // tavozasDatumDataGridViewTextBoxColumn
+            // 
+            tavozasDatumDataGridViewTextBoxColumn.DataPropertyName = "TavozasDatum";
+            tavozasDatumDataGridViewTextBoxColumn.HeaderText = "TavozasDatum";
+            tavozasDatumDataGridViewTextBoxColumn.MinimumWidth = 6;
+            tavozasDatumDataGridViewTextBoxColumn.Name = "tavozasDatumDataGridViewTextBoxColumn";
+            tavozasDatumDataGridViewTextBoxColumn.ReadOnly = true;
+            tavozasDatumDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // vendegSzamDataGridViewTextBoxColumn
+            // 
+            vendegSzamDataGridViewTextBoxColumn.DataPropertyName = "VendegSzam";
+            vendegSzamDataGridViewTextBoxColumn.HeaderText = "VendegSzam";
+            vendegSzamDataGridViewTextBoxColumn.MinimumWidth = 6;
+            vendegSzamDataGridViewTextBoxColumn.Name = "vendegSzamDataGridViewTextBoxColumn";
+            vendegSzamDataGridViewTextBoxColumn.ReadOnly = true;
+            vendegSzamDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // letrehozasDatumaDataGridViewTextBoxColumn
+            // 
+            letrehozasDatumaDataGridViewTextBoxColumn.DataPropertyName = "LetrehozasDatuma";
+            letrehozasDatumaDataGridViewTextBoxColumn.HeaderText = "LetrehozasDatuma";
+            letrehozasDatumaDataGridViewTextBoxColumn.MinimumWidth = 6;
+            letrehozasDatumaDataGridViewTextBoxColumn.Name = "letrehozasDatumaDataGridViewTextBoxColumn";
+            letrehozasDatumaDataGridViewTextBoxColumn.ReadOnly = true;
+            letrehozasDatumaDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // statusDataGridViewTextBoxColumn
+            // 
+            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
+            statusDataGridViewTextBoxColumn.HeaderText = "Status";
+            statusDataGridViewTextBoxColumn.MinimumWidth = 6;
+            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
+            statusDataGridViewTextBoxColumn.ReadOnly = true;
+            statusDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // isCancelledDataGridViewCheckBoxColumn
+            // 
+            isCancelledDataGridViewCheckBoxColumn.DataPropertyName = "IsCancelled";
+            isCancelledDataGridViewCheckBoxColumn.HeaderText = "IsCancelled";
+            isCancelledDataGridViewCheckBoxColumn.MinimumWidth = 6;
+            isCancelledDataGridViewCheckBoxColumn.Name = "isCancelledDataGridViewCheckBoxColumn";
+            isCancelledDataGridViewCheckBoxColumn.ReadOnly = true;
+            isCancelledDataGridViewCheckBoxColumn.Width = 125;
+            // 
+            // cancellationReasonDataGridViewTextBoxColumn
+            // 
+            cancellationReasonDataGridViewTextBoxColumn.DataPropertyName = "CancellationReason";
+            cancellationReasonDataGridViewTextBoxColumn.HeaderText = "CancellationReason";
+            cancellationReasonDataGridViewTextBoxColumn.MinimumWidth = 6;
+            cancellationReasonDataGridViewTextBoxColumn.Name = "cancellationReasonDataGridViewTextBoxColumn";
+            cancellationReasonDataGridViewTextBoxColumn.ReadOnly = true;
+            cancellationReasonDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // lastModifiedDateDataGridViewTextBoxColumn
+            // 
+            lastModifiedDateDataGridViewTextBoxColumn.DataPropertyName = "LastModifiedDate";
+            lastModifiedDateDataGridViewTextBoxColumn.HeaderText = "LastModifiedDate";
+            lastModifiedDateDataGridViewTextBoxColumn.MinimumWidth = 6;
+            lastModifiedDateDataGridViewTextBoxColumn.Name = "lastModifiedDateDataGridViewTextBoxColumn";
+            lastModifiedDateDataGridViewTextBoxColumn.ReadOnly = true;
+            lastModifiedDateDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // handledByUserIdDataGridViewTextBoxColumn
+            // 
+            handledByUserIdDataGridViewTextBoxColumn.DataPropertyName = "HandledByUserId";
+            handledByUserIdDataGridViewTextBoxColumn.HeaderText = "HandledByUserId";
+            handledByUserIdDataGridViewTextBoxColumn.MinimumWidth = 6;
+            handledByUserIdDataGridViewTextBoxColumn.Name = "handledByUserIdDataGridViewTextBoxColumn";
+            handledByUserIdDataGridViewTextBoxColumn.ReadOnly = true;
+            handledByUserIdDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // bookingReferenceDataGridViewTextBoxColumn
+            // 
+            bookingReferenceDataGridViewTextBoxColumn.DataPropertyName = "BookingReference";
+            bookingReferenceDataGridViewTextBoxColumn.HeaderText = "BookingReference";
+            bookingReferenceDataGridViewTextBoxColumn.MinimumWidth = 6;
+            bookingReferenceDataGridViewTextBoxColumn.Name = "bookingReferenceDataGridViewTextBoxColumn";
+            bookingReferenceDataGridViewTextBoxColumn.ReadOnly = true;
+            bookingReferenceDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // ejszakakSzamaDataGridViewTextBoxColumn
+            // 
+            ejszakakSzamaDataGridViewTextBoxColumn.DataPropertyName = "EjszakakSzama";
+            ejszakakSzamaDataGridViewTextBoxColumn.HeaderText = "EjszakakSzama";
+            ejszakakSzamaDataGridViewTextBoxColumn.MinimumWidth = 6;
+            ejszakakSzamaDataGridViewTextBoxColumn.Name = "ejszakakSzamaDataGridViewTextBoxColumn";
+            ejszakakSzamaDataGridViewTextBoxColumn.ReadOnly = true;
+            ejszakakSzamaDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // orderBvinDataGridViewTextBoxColumn
+            // 
+            orderBvinDataGridViewTextBoxColumn.DataPropertyName = "OrderBvin";
+            orderBvinDataGridViewTextBoxColumn.HeaderText = "OrderBvin";
+            orderBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
+            orderBvinDataGridViewTextBoxColumn.Name = "orderBvinDataGridViewTextBoxColumn";
+            orderBvinDataGridViewTextBoxColumn.ReadOnly = true;
+            orderBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
+            orderBvinDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // Email
+            // 
+            Email.DataPropertyName = "Email";
+            Email.HeaderText = "Email";
+            Email.MinimumWidth = 6;
+            Email.Name = "Email";
+            Email.ReadOnly = true;
+            Email.Width = 125;
+            // 
             // foglalaBindingSource
             // 
-            foglalaBindingSource.DataSource = typeof(kliens_alkalmazas.FoglalasClass);
+            foglalaBindingSource.DataSource = typeof(FoglalasClass);
             // 
             // hccProductBindingSource
             // 
@@ -151,7 +324,7 @@
             // 
             buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
-            buttonAddNewBooking.Location = new Point(852, 9);
+            buttonAddNewBooking.Location = new Point(820, 9);
             buttonAddNewBooking.Name = "buttonAddNewBooking";
             buttonAddNewBooking.Size = new Size(219, 111);
             buttonAddNewBooking.TabIndex = 6;
@@ -163,18 +336,19 @@
             // 
             buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonEditBooking.Font = new Font("Segoe UI", 11F);
-            buttonEditBooking.Location = new Point(1130, 9);
+            buttonEditBooking.Location = new Point(1098, 9);
             buttonEditBooking.Name = "buttonEditBooking";
             buttonEditBooking.Size = new Size(222, 111);
             buttonEditBooking.TabIndex = 7;
             buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
             buttonEditBooking.UseVisualStyleBackColor = true;
+            buttonEditBooking.Click += buttonEditBooking_Click;
             // 
             // buttonDeleteBooking
             // 
             buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
-            buttonDeleteBooking.Location = new Point(1411, 9);
+            buttonDeleteBooking.Location = new Point(1379, 9);
             buttonDeleteBooking.Name = "buttonDeleteBooking";
             buttonDeleteBooking.Size = new Size(210, 111);
             buttonDeleteBooking.TabIndex = 8;
@@ -185,167 +359,15 @@
             // 
             buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             buttonExit.Font = new Font("Segoe UI", 11F);
-            buttonExit.Location = new Point(83, 942);
+            buttonExit.Location = new Point(83, 945);
             buttonExit.Name = "buttonExit";
             buttonExit.Size = new Size(166, 75);
             buttonExit.TabIndex = 9;
             buttonExit.Text = "Kilépés";
             buttonExit.UseVisualStyleBackColor = true;
             // 
-            // foglalasIdDataGridViewTextBoxColumn
-            // 
-            foglalasIdDataGridViewTextBoxColumn.DataPropertyName = "FoglalasId";
-            foglalasIdDataGridViewTextBoxColumn.HeaderText = "FoglalasId";
-            foglalasIdDataGridViewTextBoxColumn.MinimumWidth = 6;
-            foglalasIdDataGridViewTextBoxColumn.Name = "foglalasIdDataGridViewTextBoxColumn";
-            foglalasIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            foglalasIdDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // userIdDataGridViewTextBoxColumn
-            // 
-            userIdDataGridViewTextBoxColumn.DataPropertyName = "UserId";
-            userIdDataGridViewTextBoxColumn.DataSource = userBindingSource;
-            userIdDataGridViewTextBoxColumn.DisplayMember = "DisplayName";
-            userIdDataGridViewTextBoxColumn.HeaderText = "UserId";
-            userIdDataGridViewTextBoxColumn.MinimumWidth = 6;
-            userIdDataGridViewTextBoxColumn.Name = "userIdDataGridViewTextBoxColumn";
-            userIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            userIdDataGridViewTextBoxColumn.SortMode = DataGridViewColumnSortMode.Automatic;
-            userIdDataGridViewTextBoxColumn.ValueMember = "UserId";
-            userIdDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // productBvinDataGridViewTextBoxColumn
-            // 
-            productBvinDataGridViewTextBoxColumn.DataPropertyName = "ProductBvin";
-            productBvinDataGridViewTextBoxColumn.HeaderText = "ProductBvin";
-            productBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
-            productBvinDataGridViewTextBoxColumn.Name = "productBvinDataGridViewTextBoxColumn";
-            productBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            productBvinDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // telefonDataGridViewTextBoxColumn
-            // 
-            telefonDataGridViewTextBoxColumn.DataPropertyName = "Telefon";
-            telefonDataGridViewTextBoxColumn.HeaderText = "Telefon";
-            telefonDataGridViewTextBoxColumn.MinimumWidth = 6;
-            telefonDataGridViewTextBoxColumn.Name = "telefonDataGridViewTextBoxColumn";
-            telefonDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // lokacioDataGridViewTextBoxColumn
-            // 
-            lokacioDataGridViewTextBoxColumn.DataPropertyName = "Lokacio";
-            lokacioDataGridViewTextBoxColumn.HeaderText = "Lokacio";
-            lokacioDataGridViewTextBoxColumn.MinimumWidth = 6;
-            lokacioDataGridViewTextBoxColumn.Name = "lokacioDataGridViewTextBoxColumn";
-            lokacioDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // erkezesDatumDataGridViewTextBoxColumn
-            // 
-            erkezesDatumDataGridViewTextBoxColumn.DataPropertyName = "ErkezesDatum";
-            erkezesDatumDataGridViewTextBoxColumn.HeaderText = "ErkezesDatum";
-            erkezesDatumDataGridViewTextBoxColumn.MinimumWidth = 6;
-            erkezesDatumDataGridViewTextBoxColumn.Name = "erkezesDatumDataGridViewTextBoxColumn";
-            erkezesDatumDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // tavozasDatumDataGridViewTextBoxColumn
-            // 
-            tavozasDatumDataGridViewTextBoxColumn.DataPropertyName = "TavozasDatum";
-            tavozasDatumDataGridViewTextBoxColumn.HeaderText = "TavozasDatum";
-            tavozasDatumDataGridViewTextBoxColumn.MinimumWidth = 6;
-            tavozasDatumDataGridViewTextBoxColumn.Name = "tavozasDatumDataGridViewTextBoxColumn";
-            tavozasDatumDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // vendegSzamDataGridViewTextBoxColumn
-            // 
-            vendegSzamDataGridViewTextBoxColumn.DataPropertyName = "VendegSzam";
-            vendegSzamDataGridViewTextBoxColumn.HeaderText = "VendegSzam";
-            vendegSzamDataGridViewTextBoxColumn.MinimumWidth = 6;
-            vendegSzamDataGridViewTextBoxColumn.Name = "vendegSzamDataGridViewTextBoxColumn";
-            vendegSzamDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // letrehozasDatumaDataGridViewTextBoxColumn
-            // 
-            letrehozasDatumaDataGridViewTextBoxColumn.DataPropertyName = "LetrehozasDatuma";
-            letrehozasDatumaDataGridViewTextBoxColumn.HeaderText = "LetrehozasDatuma";
-            letrehozasDatumaDataGridViewTextBoxColumn.MinimumWidth = 6;
-            letrehozasDatumaDataGridViewTextBoxColumn.Name = "letrehozasDatumaDataGridViewTextBoxColumn";
-            letrehozasDatumaDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // statusDataGridViewTextBoxColumn
-            // 
-            statusDataGridViewTextBoxColumn.DataPropertyName = "Status";
-            statusDataGridViewTextBoxColumn.HeaderText = "Status";
-            statusDataGridViewTextBoxColumn.MinimumWidth = 6;
-            statusDataGridViewTextBoxColumn.Name = "statusDataGridViewTextBoxColumn";
-            statusDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // isCancelledDataGridViewCheckBoxColumn
-            // 
-            isCancelledDataGridViewCheckBoxColumn.DataPropertyName = "IsCancelled";
-            isCancelledDataGridViewCheckBoxColumn.HeaderText = "IsCancelled";
-            isCancelledDataGridViewCheckBoxColumn.MinimumWidth = 6;
-            isCancelledDataGridViewCheckBoxColumn.Name = "isCancelledDataGridViewCheckBoxColumn";
-            isCancelledDataGridViewCheckBoxColumn.Width = 125;
-            // 
-            // cancellationReasonDataGridViewTextBoxColumn
-            // 
-            cancellationReasonDataGridViewTextBoxColumn.DataPropertyName = "CancellationReason";
-            cancellationReasonDataGridViewTextBoxColumn.HeaderText = "CancellationReason";
-            cancellationReasonDataGridViewTextBoxColumn.MinimumWidth = 6;
-            cancellationReasonDataGridViewTextBoxColumn.Name = "cancellationReasonDataGridViewTextBoxColumn";
-            cancellationReasonDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // lastModifiedDateDataGridViewTextBoxColumn
-            // 
-            lastModifiedDateDataGridViewTextBoxColumn.DataPropertyName = "LastModifiedDate";
-            lastModifiedDateDataGridViewTextBoxColumn.HeaderText = "LastModifiedDate";
-            lastModifiedDateDataGridViewTextBoxColumn.MinimumWidth = 6;
-            lastModifiedDateDataGridViewTextBoxColumn.Name = "lastModifiedDateDataGridViewTextBoxColumn";
-            lastModifiedDateDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // handledByUserIdDataGridViewTextBoxColumn
-            // 
-            handledByUserIdDataGridViewTextBoxColumn.DataPropertyName = "HandledByUserId";
-            handledByUserIdDataGridViewTextBoxColumn.HeaderText = "HandledByUserId";
-            handledByUserIdDataGridViewTextBoxColumn.MinimumWidth = 6;
-            handledByUserIdDataGridViewTextBoxColumn.Name = "handledByUserIdDataGridViewTextBoxColumn";
-            handledByUserIdDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // bookingReferenceDataGridViewTextBoxColumn
-            // 
-            bookingReferenceDataGridViewTextBoxColumn.DataPropertyName = "BookingReference";
-            bookingReferenceDataGridViewTextBoxColumn.HeaderText = "BookingReference";
-            bookingReferenceDataGridViewTextBoxColumn.MinimumWidth = 6;
-            bookingReferenceDataGridViewTextBoxColumn.Name = "bookingReferenceDataGridViewTextBoxColumn";
-            bookingReferenceDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // ejszakakSzamaDataGridViewTextBoxColumn
-            // 
-            ejszakakSzamaDataGridViewTextBoxColumn.DataPropertyName = "EjszakakSzama";
-            ejszakakSzamaDataGridViewTextBoxColumn.HeaderText = "EjszakakSzama";
-            ejszakakSzamaDataGridViewTextBoxColumn.MinimumWidth = 6;
-            ejszakakSzamaDataGridViewTextBoxColumn.Name = "ejszakakSzamaDataGridViewTextBoxColumn";
-            ejszakakSzamaDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // orderBvinDataGridViewTextBoxColumn
-            // 
-            orderBvinDataGridViewTextBoxColumn.DataPropertyName = "OrderBvin";
-            orderBvinDataGridViewTextBoxColumn.HeaderText = "OrderBvin";
-            orderBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
-            orderBvinDataGridViewTextBoxColumn.Name = "orderBvinDataGridViewTextBoxColumn";
-            orderBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            orderBvinDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // Email
-            // 
-            Email.DataPropertyName = "Email";
-            Email.HeaderText = "Email";
-            Email.MinimumWidth = 6;
-            Email.Name = "Email";
-            Email.Width = 125;
-            //
             // Nev
-            //
+            // 
             Nev.DataPropertyName = "Nev";
             Nev.HeaderText = "Nev";
             Nev.MinimumWidth = 6;
@@ -356,7 +378,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1744, 1037);
+            ClientSize = new Size(1712, 1040);
             Controls.Add(buttonExit);
             Controls.Add(buttonDeleteBooking);
             Controls.Add(buttonEditBooking);

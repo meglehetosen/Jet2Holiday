@@ -4,6 +4,7 @@ namespace kliens_alkalmazas
     {
         private const string AllStatus = "All";
         private readonly Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
+        public FoglalasClass kivalasztottFoglalas;
 
         public Form1()
         {
@@ -180,7 +181,7 @@ namespace kliens_alkalmazas
                 jet2HolidayContext.Foglalas.Add(entity);
 
                 try
-                { 
+                {
                     jet2HolidayContext.SaveChanges();
                 }
                 catch (Exception ex)
@@ -192,6 +193,81 @@ namespace kliens_alkalmazas
             }
 
             this.Show();
+        }
+
+        private void buttonEditBooking_Click(object sender, EventArgs e)
+        {
+            if (foglalaBindingSource.Current is not FoglalasClass aktualis)
+            {
+                MessageBox.Show("Nincs kiválasztott foglalás.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var szerkesztendo = new FoglalasClass
+            {
+                FoglalasId = aktualis.FoglalasId,
+                UserId = aktualis.UserId,
+                ProductBvin = aktualis.ProductBvin,
+                Telefon = aktualis.Telefon,
+                Lokacio = aktualis.Lokacio,
+                ErkezesDatum = aktualis.ErkezesDatum,
+                TavozasDatum = aktualis.TavozasDatum,
+                VendegSzam = aktualis.VendegSzam,
+                LetrehozasDatuma = aktualis.LetrehozasDatuma,
+                Status = aktualis.Status,
+                IsCancelled = aktualis.IsCancelled,
+                CancellationReason = aktualis.CancellationReason,
+                LastModifiedDate = aktualis.LastModifiedDate,
+                HandledByUserId = aktualis.HandledByUserId,
+                BookingReference = aktualis.BookingReference,
+                EjszakakSzama = aktualis.EjszakakSzama,
+                OrderBvin = aktualis.OrderBvin,
+                Email = aktualis.Email,
+                Nev = aktualis.Nev
+            };
+
+            using var formEdit = new FormEdit(szerkesztendo);
+
+            if (formEdit.ShowDialog() != DialogResult.OK)
+            {
+                return;
+            }
+
+            var modositott = formEdit.ujFoglalas;
+
+            var entity = jet2HolidayContext.Foglalas.FirstOrDefault(f => f.FoglalasId == modositott.FoglalasId);
+            if (entity == null)
+            {
+                MessageBox.Show("A módosítandó rekord nem található.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            entity.UserId = modositott.UserId;
+            entity.ProductBvin = modositott.ProductBvin;
+            entity.Telefon = modositott.Telefon;
+            entity.Lokacio = modositott.Lokacio;
+            entity.ErkezesDatum = modositott.ErkezesDatum;
+            entity.TavozasDatum = modositott.TavozasDatum;
+            entity.VendegSzam = modositott.VendegSzam;
+            entity.LetrehozasDatuma = modositott.LetrehozasDatuma;
+            entity.Status = modositott.Status;
+            entity.IsCancelled = modositott.IsCancelled;
+            entity.CancellationReason = modositott.CancellationReason;
+            entity.HandledByUserId = modositott.HandledByUserId;
+            entity.BookingReference = modositott.BookingReference;
+            entity.EjszakakSzama = modositott.EjszakakSzama;
+            entity.OrderBvin = modositott.OrderBvin;
+            entity.LastModifiedDate = DateTime.Now;
+
+            try
+            {
+                jet2HolidayContext.SaveChanges();
+                RefreshFoglalasGridBySelectedUser();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

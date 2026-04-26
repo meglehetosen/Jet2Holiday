@@ -14,23 +14,44 @@ using System.Windows.Forms;
 
 namespace kliens_alkalmazas
 {
-    public partial class FormAdd : Form
+    public partial class FormEdit : Form
     {
         Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
 
         public FoglalasClass ujFoglalas = new();
 
-        public FormAdd(FoglalasClass uj)
+        public FormEdit(FoglalasClass uj)
         {
             InitializeComponent();
 
             this.StartPosition = FormStartPosition.CenterScreen;
             ujFoglalas = uj ?? new FoglalasClass();
+
+            Load += FormAdd_Load;
+
+            buttonMentes.DialogResult = DialogResult.None;
+            buttonMentes.Click += buttonMentes_Click;
+            buttonSearchProductbvin.Click += buttonSearchProductbvin_Click;
+            buttonSearchOrderbvin.Click += buttonSearchOrderbvin_Click;
         }
 
         private void FormAdd_Load(object sender, EventArgs e)
         {
-            bindingSource1.DataSource = ujFoglalas;
+            textBox1.Text = ujFoglalas.Nev ?? string.Empty;
+            textBox2.Text = ujFoglalas.Email ?? string.Empty;
+            textBox3.Text = ujFoglalas.Telefon ?? string.Empty;
+            textBox4.Text = ujFoglalas.Lokacio ?? string.Empty;
+            textBox5.Text = ujFoglalas.ErkezesDatum == default ? string.Empty : ujFoglalas.ErkezesDatum.ToString("yyyy.MM.dd");
+            textBox6.Text = ujFoglalas.TavozasDatum == default ? string.Empty : ujFoglalas.TavozasDatum.ToString("yyyy.MM.dd");
+            textBox7.Text = ujFoglalas.VendegSzam?.ToString() ?? string.Empty;
+            textBox8.Text = ujFoglalas.LetrehozasDatuma?.ToString("yyyy.MM.dd") ?? string.Empty;
+            textBox9.Text = ujFoglalas.Status ?? string.Empty;
+            textBox10.Text = ujFoglalas.ProductBvin == Guid.Empty ? string.Empty : ujFoglalas.ProductBvin.ToString();
+            textBox11.Text = ujFoglalas.OrderBvin?.ToString() ?? string.Empty;
+            textBox12.Text = ujFoglalas.CancellationReason ?? string.Empty;
+            textBox13.Text = ujFoglalas.BookingReference ?? string.Empty;
+            textBox14.Text = ujFoglalas.EjszakakSzama?.ToString() ?? string.Empty;
+            checkBox1.Checked = ujFoglalas.IsCancelled;
         }
 
         // REGEXEK ÉS VALIDÁLÁSOK
@@ -260,20 +281,62 @@ namespace kliens_alkalmazas
 
         private void buttonMentes_Click(object sender, EventArgs e)
         {
-            if (ValidateChildren() && !string.IsNullOrWhiteSpace(ujFoglalas.ProductBvin.ToString()))
+            if (!ValidateChildren())
             {
-                this.DialogResult = DialogResult.OK;
-                ujFoglalas.ProductBvin = ujFoglalas.ProductBvin == Guid.Empty ? Guid.NewGuid() : ujFoglalas.ProductBvin;
-                
+                return;
             }
 
-            if (ValidateChildren() && string.IsNullOrWhiteSpace(ujFoglalas.OrderBvin.ToString()))
+            if (!Guid.TryParse(textBox10.Text.Trim(), out var productBvin))
             {
-                this.DialogResult = DialogResult.OK;
-                ujFoglalas.OrderBvin = ujFoglalas.OrderBvin == Guid.Empty ? Guid.NewGuid() : ujFoglalas.OrderBvin;
+                MessageBox.Show("A Product bvin formátuma hibás!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
+
+            if (!DateOnly.TryParse(textBox5.Text.Trim(), out var erkezes) ||
+                !DateOnly.TryParse(textBox6.Text.Trim(), out var tavozas))
+            {
+                MessageBox.Show("Az érkezés vagy távozás dátuma hibás!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            if (tavozas <= erkezes)
+            {
+                MessageBox.Show("A távozás dátuma legyen későbbi, mint az érkezés dátuma!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            Guid? orderBvin = null;
+            if (!string.IsNullOrWhiteSpace(textBox11.Text))
+            {
+                if (!Guid.TryParse(textBox11.Text.Trim(), out var parsedOrderBvin))
+                {
+                    MessageBox.Show("Az Order bvin formátuma hibás!", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                orderBvin = parsedOrderBvin;
+            }
+
+            ujFoglalas.Nev = textBox1.Text.Trim();
+            ujFoglalas.Email = textBox2.Text.Trim();
+            ujFoglalas.Telefon = textBox3.Text.Trim();
+            ujFoglalas.Lokacio = textBox4.Text.Trim();
+            ujFoglalas.ErkezesDatum = erkezes;
+            ujFoglalas.TavozasDatum = tavozas;
+            ujFoglalas.VendegSzam = int.TryParse(textBox7.Text, out var vendeg) ? vendeg : null;
+            ujFoglalas.LetrehozasDatuma = DateTime.TryParse(textBox8.Text, out var letrehozas) ? letrehozas : null;
+            ujFoglalas.Status = textBox9.Text.Trim();
+            ujFoglalas.ProductBvin = productBvin;
+            ujFoglalas.OrderBvin = orderBvin;
+            ujFoglalas.CancellationReason = textBox12.Text.Trim();
+            ujFoglalas.BookingReference = textBox13.Text.Trim();
+            ujFoglalas.EjszakakSzama = int.TryParse(textBox14.Text, out var ejszakak) ? ejszakak : null;
+            ujFoglalas.IsCancelled = checkBox1.Checked;
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
-        
+
     }
 }
