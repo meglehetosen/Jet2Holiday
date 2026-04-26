@@ -81,8 +81,7 @@ namespace kliens_alkalmazas
 
         private bool CheckEjszakak(string input)
         {
-            Regex r = new Regex(@"^[1-2]\d*$");
-            return r.IsMatch(input);
+            return int.TryParse(input, out var ejszakak) && ejszakak > 0 && ejszakak < 20;
         }
 
         private bool CheckBookingReference(string BookingReference)
@@ -223,16 +222,12 @@ namespace kliens_alkalmazas
             if (!CheckEjszakak(textBox14.Text))
             {
                 e.Cancel = true;
-                errorProvider1.SetError(textBox14, "Az éjszakák száma csak szám lehet!");
+                errorProvider1.SetError(textBox14, "Az éjszakák száma 1 és 19 közötti egész szám lehet!");
             }
-            else { errorProvider1.SetError(textBox14, string.Empty); }
-
-            if (int.TryParse(textBox14.Text, out int ejszakak) && ejszakak >= 20)
+            else
             {
-                e.Cancel = true;
-                errorProvider1.SetError(textBox14, "Az éjszakák száma nem lehet 20 vagy annál több!");
+                errorProvider1.SetError(textBox14, string.Empty);
             }
-            else { errorProvider1.SetError(textBox14, string.Empty); }
         }
 
         //Vendégszám validálása: csak szám lehet, nem lehet 6 vagy annál több egy szobában

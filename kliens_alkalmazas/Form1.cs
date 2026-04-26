@@ -1,4 +1,4 @@
-namespace kliens_alkalmazas
+﻿namespace kliens_alkalmazas
 {
     public partial class Form1 : Form
     {
@@ -186,7 +186,8 @@ namespace kliens_alkalmazas
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    var details = ex.InnerException?.Message ?? ex.Message;
+                    MessageBox.Show(details, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
 
                 RefreshFoglalasGridBySelectedUser();
@@ -199,7 +200,7 @@ namespace kliens_alkalmazas
         {
             if (foglalaBindingSource.Current is not FoglalasClass aktualis)
             {
-                MessageBox.Show("Nincs kiv�lasztott foglal�s.", "Inform�ci�", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Nincs kiválasztott foglalás.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
@@ -238,7 +239,7 @@ namespace kliens_alkalmazas
             var entity = jet2HolidayContext.Foglalas.FirstOrDefault(f => f.FoglalasId == modositott.FoglalasId);
             if (entity == null)
             {
-                MessageBox.Show("A m�dos�tand� rekord nem tal�lhat�.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("A módosítandó rekord nem található.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -268,6 +269,51 @@ namespace kliens_alkalmazas
             {
                 MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void buttonDeleteBooking_Click(object sender, EventArgs e)
+        {
+            if (foglalaBindingSource.Current is not FoglalasClass kijelolt)
+            {
+                MessageBox.Show("Nincs kiválasztott foglalás.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var megerosites = MessageBox.Show(
+                $"Biztosan törlöd ezt a foglalást? (ID: {kijelolt.FoglalasId})",
+                "Megerősítés",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Warning);
+
+            if (megerosites != DialogResult.Yes)
+            {
+                return;
+            }
+
+            var entity = jet2HolidayContext.Foglalas.FirstOrDefault(f => f.FoglalasId == kijelolt.FoglalasId);
+            if (entity == null)
+            {
+                MessageBox.Show("A törlendő rekord nem található.", "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            jet2HolidayContext.Foglalas.Remove(entity);
+
+            try
+            {
+                jet2HolidayContext.SaveChanges();
+                RefreshFoglalasGridBySelectedUser();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void buttonExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+            Application.Exit();
         }
     }
 }

@@ -82,7 +82,7 @@
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1393, 822);
+            dataGridView1.Size = new Size(1368, 788);
             dataGridView1.TabIndex = 0;
             // 
             // foglalasIdDataGridViewTextBoxColumn
@@ -279,7 +279,7 @@
             listBoxUser.FormattingEnabled = true;
             listBoxUser.Location = new Point(12, 138);
             listBoxUser.Name = "listBoxUser";
-            listBoxUser.Size = new Size(298, 784);
+            listBoxUser.Size = new Size(298, 744);
             listBoxUser.TabIndex = 1;
             listBoxUser.ValueMember = "UserId";
             listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
@@ -324,7 +324,7 @@
             // 
             buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
-            buttonAddNewBooking.Location = new Point(820, 9);
+            buttonAddNewBooking.Location = new Point(795, 9);
             buttonAddNewBooking.Name = "buttonAddNewBooking";
             buttonAddNewBooking.Size = new Size(219, 111);
             buttonAddNewBooking.TabIndex = 6;
@@ -336,7 +336,7 @@
             // 
             buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonEditBooking.Font = new Font("Segoe UI", 11F);
-            buttonEditBooking.Location = new Point(1098, 9);
+            buttonEditBooking.Location = new Point(1073, 9);
             buttonEditBooking.Name = "buttonEditBooking";
             buttonEditBooking.Size = new Size(222, 111);
             buttonEditBooking.TabIndex = 7;
@@ -348,23 +348,25 @@
             // 
             buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
-            buttonDeleteBooking.Location = new Point(1379, 9);
+            buttonDeleteBooking.Location = new Point(1354, 9);
             buttonDeleteBooking.Name = "buttonDeleteBooking";
             buttonDeleteBooking.Size = new Size(210, 111);
             buttonDeleteBooking.TabIndex = 8;
             buttonDeleteBooking.Text = "Foglalás törlése";
             buttonDeleteBooking.UseVisualStyleBackColor = true;
+            buttonDeleteBooking.Click += buttonDeleteBooking_Click;
             // 
             // buttonExit
             // 
             buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             buttonExit.Font = new Font("Segoe UI", 11F);
-            buttonExit.Location = new Point(83, 945);
+            buttonExit.Location = new Point(83, 911);
             buttonExit.Name = "buttonExit";
             buttonExit.Size = new Size(166, 75);
             buttonExit.TabIndex = 9;
             buttonExit.Text = "Kilépés";
             buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
             // 
             // Nev
             // 
@@ -378,7 +380,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1712, 1040);
+            ClientSize = new Size(1687, 1006);
             Controls.Add(buttonExit);
             Controls.Add(buttonDeleteBooking);
             Controls.Add(buttonEditBooking);
