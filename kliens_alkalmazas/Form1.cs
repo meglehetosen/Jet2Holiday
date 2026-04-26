@@ -178,10 +178,20 @@ namespace kliens_alkalmazas
                 };
 
                 jet2HolidayContext.Foglalas.Add(entity);
-                jet2HolidayContext.SaveChanges();
+
+                try
+                { 
+                    jet2HolidayContext.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
 
                 RefreshFoglalasGridBySelectedUser();
             }
+
+            this.Show();
         }
     }
 }

@@ -11,57 +11,55 @@ using System.Windows.Forms;
 
 namespace kliens_alkalmazas
 {
-    public partial class FormProductBvin : Form
+    public partial class FormOrderBvin : Form
     {
         Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
-        public Models.HccProduct SelectedProduct = new Models.HccProduct();
-        public FormProductBvin()
+        public Models.HccOrder SelectedOrder = new Models.HccOrder();
+        public FormOrderBvin()
         {
             InitializeComponent();
 
             this.StartPosition = FormStartPosition.CenterScreen;
         }
 
-        private void FormProductBvin_Load(object sender, EventArgs e)
+        private void FormOrderBvin_Load(object sender, EventArgs e)
         {
-            jet2HolidayContext.HccProducts.Load();
-            hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts.Local.ToBindingList();
+            jet2HolidayContext.HccOrders.Load();
+            hccOrderBindingSource.DataSource = jet2HolidayContext.HccOrders.Local.ToBindingList();
         }
 
         private void Adatbetoltes()
         {
-            var filter = textBoxProductBvinSzuro.Text.Trim();
-
+            var filter = textBoxOrderBvinSzuro.Text.Trim();
             if (string.IsNullOrWhiteSpace(filter))
             {
-                hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts
+                hccOrderBindingSource.DataSource = jet2HolidayContext.HccOrders
                     .ToList();
                 return;
             }
-
             if (Guid.TryParse(filter, out var guidFilter))
             {
-                hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts
-                    .Where(p => p.Bvin == guidFilter)
+                hccOrderBindingSource.DataSource = jet2HolidayContext.HccOrders
+                    .Where(o => o.Bvin == guidFilter)
                     .ToList();
             }
             else
             {
-                hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts
+                hccOrderBindingSource.DataSource = jet2HolidayContext.HccOrders
                     .AsEnumerable()
-                    .Where(p => p.Bvin.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
+                    .Where(o => o.Bvin.ToString().Contains(filter, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
         }
 
-        private void textBoxProductBvinSzuro_TextChanged(object sender, EventArgs e)
+        private void textBoxOrderBvinSzuro_TextChanged(object sender, EventArgs e)
         {
             Adatbetoltes();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            SelectedProduct = (Models.HccProduct)hccProductBindingSource.Current;
+            SelectedOrder = (Models.HccOrder)hccOrderBindingSource.Current;
         }
 
         private void button2_Click(object sender, EventArgs e)

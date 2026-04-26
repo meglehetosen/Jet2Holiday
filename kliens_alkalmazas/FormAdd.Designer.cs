@@ -63,7 +63,9 @@
             buttonSearchOrderbvin = new Button();
             buttonMentes = new Button();
             buttonNo = new Button();
+            errorProvider1 = new ErrorProvider(components);
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
             // 
             // bindingSource1
@@ -88,6 +90,7 @@
             textBox2.Name = "textBox2";
             textBox2.Size = new Size(244, 27);
             textBox2.TabIndex = 1;
+            textBox2.Validating += textBox2_Validating;
             // 
             // textBox3
             // 
@@ -162,9 +165,9 @@
             label5.AutoSize = true;
             label5.Location = new Point(48, 374);
             label5.Name = "label5";
-            label5.Size = new Size(213, 20);
+            label5.Size = new Size(206, 20);
             label5.TabIndex = 9;
-            label5.Text = "Érkezés dátuma (YYYY.MM.DD)";
+            label5.Text = "Érkezés dátuma (M/DD/YYYY)";
             // 
             // label6
             // 
@@ -172,9 +175,9 @@
             label6.AutoSize = true;
             label6.Location = new Point(48, 452);
             label6.Name = "label6";
-            label6.Size = new Size(215, 20);
+            label6.Size = new Size(208, 20);
             label6.TabIndex = 11;
-            label6.Text = "Távozás dátuma (YYYY.MM.DD)";
+            label6.Text = "Távozás dátuma (M/DD/YYYY)";
             // 
             // textBox6
             // 
@@ -210,9 +213,9 @@
             label8.AutoSize = true;
             label8.Location = new Point(48, 533);
             label8.Name = "label8";
-            label8.Size = new Size(235, 20);
+            label8.Size = new Size(228, 20);
             label8.TabIndex = 15;
-            label8.Text = "Létrehozás dátuma (YYYY.MM.DD)";
+            label8.Text = "Létrehozás dátuma (M/DD/YYYY)";
             // 
             // textBox8
             // 
@@ -329,6 +332,7 @@
             textBox13.Name = "textBox13";
             textBox13.Size = new Size(244, 27);
             textBox13.TabIndex = 25;
+            textBox13.Validating += textBox13_Validating;
             // 
             // label14
             // 
@@ -348,6 +352,7 @@
             textBox14.Name = "textBox14";
             textBox14.Size = new Size(244, 27);
             textBox14.TabIndex = 27;
+            textBox14.Validating += textBox14_Validating;
             // 
             // buttonSearchProductbvin
             // 
@@ -358,6 +363,7 @@
             buttonSearchProductbvin.TabIndex = 29;
             buttonSearchProductbvin.Text = "Keresés";
             buttonSearchProductbvin.UseVisualStyleBackColor = true;
+            buttonSearchProductbvin.Click += buttonSearchProductbvin_Click;
             // 
             // buttonSearchOrderbvin
             // 
@@ -368,6 +374,7 @@
             buttonSearchOrderbvin.TabIndex = 30;
             buttonSearchOrderbvin.Text = "Keresés";
             buttonSearchOrderbvin.UseVisualStyleBackColor = true;
+            buttonSearchOrderbvin.Click += buttonSearchOrderbvin_Click;
             // 
             // buttonMentes
             // 
@@ -379,6 +386,7 @@
             buttonMentes.TabIndex = 31;
             buttonMentes.Text = "Mentés";
             buttonMentes.UseVisualStyleBackColor = true;
+            buttonMentes.Click += buttonMentes_Click;
             // 
             // buttonNo
             // 
@@ -390,6 +398,10 @@
             buttonNo.TabIndex = 32;
             buttonNo.Text = "Mégse";
             buttonNo.UseVisualStyleBackColor = true;
+            // 
+            // errorProvider1
+            // 
+            errorProvider1.ContainerControl = this;
             // 
             // FormAdd
             // 
@@ -433,6 +445,7 @@
             Text = "Vendégszám";
             Load += FormAdd_Load;
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -473,5 +486,6 @@
         private Button buttonSearchOrderbvin;
         private Button buttonMentes;
         private Button buttonNo;
+        private ErrorProvider errorProvider1;
     }
 }
