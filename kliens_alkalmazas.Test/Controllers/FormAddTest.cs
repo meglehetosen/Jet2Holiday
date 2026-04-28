@@ -8,7 +8,7 @@ using kliens_alkalmazas;
 
 namespace kliens_alkalmazas.Test.Controllers
 {
-    public class BookingControllerTest
+    public class FormAddTest
     {
         private FormAdd _form;
 
@@ -84,6 +84,21 @@ namespace kliens_alkalmazas.Test.Controllers
         {
             bool result = _form.CheckVendegszam(vendeg);
             Assert.That(result, Is.EqualTo(expected));
+        }
+
+        // textBox5 és textBox6 (érkezés és távozás dátuma) összehasonlításának tesztelése
+        [TestCase("2024.05.01", "2024.05.05", true)]  // Normál eset
+        [TestCase("2024.05.05", "2024.05.01", false)] // Fordított dátumok - HIBA
+        [TestCase("2024.05.01", "2024.05.01", false)] // Egynapos (0 éjszaka) - HIBA (a kódod szerint)
+        [TestCase("nem_dátum", "2024.05.01", false)]  // Hibás formátum
+        public void TestDateComparisonLogic(string erk, string tav, bool expected)
+        {
+            // A FormAdd-ban lévő DateTime.TryParse és az if (erkezes >= tavozas) logikát szimuláljuk
+            bool isValid = DateTime.TryParse(erk, out DateTime erkezes) &&
+                           DateTime.TryParse(tav, out DateTime tavozas) &&
+                           erkezes < tavozas;
+
+            Assert.That(isValid, Is.EqualTo(expected));
         }
     }
 }

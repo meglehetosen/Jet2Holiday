@@ -84,7 +84,7 @@ namespace kliens_alkalmazas
             return int.TryParse(input, out var ejszakak) && ejszakak > 0 && ejszakak < 20;
         }
 
-        private bool CheckBookingReference(string BookingReference)
+        internal bool CheckBookingReference(string BookingReference)
         {
             Regex r = new Regex(@"^JH-\d{4}-\d{6}$");
             return r.IsMatch(BookingReference);
