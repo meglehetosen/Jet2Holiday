@@ -35,12 +35,12 @@ namespace kliens_alkalmazas
 
         // REGEXEK ÉS VALIDÁLÁSOK
 
-        private bool CheckEmpty(string név)
+        internal bool CheckEmpty(string név)
         {
             return !string.IsNullOrEmpty(név);
         }
 
-        private bool CheckEmail(string Email)
+        internal bool CheckEmail(string Email)
         {
             Regex r = new Regex(@"^[\w\.-]+@[\w\.-]+\.\w+$");
             return r.IsMatch(Email);
@@ -52,24 +52,24 @@ namespace kliens_alkalmazas
         //    return r.IsMatch(ErkezesDatum) && r.IsMatch(TavozasDatum);
         //}
 
-        private bool CheckPhoneNumber(string Telefon)
+        internal bool CheckPhoneNumber(string Telefon)
         {
             Regex r = new Regex(@"^\+36\d{9}$");
             return r.IsMatch(Telefon);
         }
 
-        private bool CheckEjszakak(string input)
+        internal bool CheckEjszakak(string input)
         {
             return int.TryParse(input, out var ejszakak) && ejszakak > 0 && ejszakak < 20;
         }
 
-        private bool CheckBookingReference(string BookingReference)
+        internal bool CheckBookingReference(string BookingReference)
         {
             Regex r = new Regex(@"^JH-\d{4}-\d{6}$");
             return r.IsMatch(BookingReference);
         }
 
-        private bool CheckVendegszam(string Vendegszam)
+        internal bool CheckVendegszam(string Vendegszam)
         {
             Regex r = new Regex(@"^\d+$");
             return r.IsMatch(Vendegszam);
