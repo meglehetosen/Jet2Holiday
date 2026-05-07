@@ -1583,11 +1583,17 @@ public partial class Jet2HolidaySqldbContext : DbContext
             entity.Property(e => e.BookingReference).HasMaxLength(50);
             entity.Property(e => e.CancellationReason).HasMaxLength(255);
             entity.Property(e => e.EjszakakSzama).HasComputedColumnSql("(datediff(day,[ErkezesDatum],[TavozasDatum]))", true);
+            entity.Property(e => e.Email)
+                .HasMaxLength(254)
+                .HasDefaultValue("");
             entity.Property(e => e.LastModifiedDate).HasColumnType("datetime");
             entity.Property(e => e.LetrehozasDatuma)
                 .HasDefaultValueSql("(getdate())")
                 .HasColumnType("datetime");
             entity.Property(e => e.Lokacio).HasMaxLength(150);
+            entity.Property(e => e.Nev)
+                .HasMaxLength(150)
+                .HasDefaultValue("");
             entity.Property(e => e.Status)
                 .HasMaxLength(50)
                 .HasDefaultValue("Confirmed");

@@ -18,14 +18,14 @@ namespace kliens_alkalmazas
     {
         Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
 
-        public FoglalasClass ujFoglalas = new();
+        public Models.Foglala ujFoglalas = new();
 
-        public FormEdit(FoglalasClass uj)
+        public FormEdit(Models.Foglala uj)
         {
             InitializeComponent();
 
             this.StartPosition = FormStartPosition.CenterScreen;
-            ujFoglalas = uj ?? new FoglalasClass();
+            ujFoglalas = uj ?? new Models.Foglala();
 
             Load += FormAdd_Load;
 

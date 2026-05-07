@@ -4,7 +4,7 @@
     {
         private const string AllStatus = "All";
         private readonly Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
-        public FoglalasClass kivalasztottFoglalas;
+        public Models.Foglala? kivalasztottFoglalas;
 
         public Form1()
         {
@@ -58,7 +58,7 @@
             }
             else
             {
-                foglalaBindingSource.DataSource = new List<FoglalasClass>();
+                foglalaBindingSource.DataSource = new List<Models.Foglala>();
             }
 
             RefreshFoglalasGridBySelectedUser();
@@ -78,7 +78,7 @@
         {
             if (listBoxUser.SelectedItem is not Models.User selectedUser)
             {
-                foglalaBindingSource.DataSource = new List<FoglalasClass>();
+                foglalaBindingSource.DataSource = new List<Models.Foglala>();
                 return;
             }
 
@@ -94,37 +94,7 @@
 
             query = query.OrderBy(f => f.FoglalasId);
 
-            if (string.Equals(selectedStatus, AllStatus, StringComparison.OrdinalIgnoreCase))
-            {
-                query = query.Take(10);
-            }
-
-            var foglalasok = (from f in query
-                              join u in jet2HolidayContext.Users on f.UserId equals u.UserId
-                              select new FoglalasClass
-                              {
-                                  FoglalasId = f.FoglalasId,
-                                  UserId = f.UserId,
-                                  ProductBvin = f.ProductBvin,
-                                  Telefon = f.Telefon,
-                                  Lokacio = f.Lokacio,
-                                  ErkezesDatum = f.ErkezesDatum,
-                                  TavozasDatum = f.TavozasDatum,
-                                  VendegSzam = f.VendegSzam,
-                                  LetrehozasDatuma = f.LetrehozasDatuma,
-                                  Status = f.Status,
-                                  IsCancelled = f.IsCancelled,
-                                  CancellationReason = f.CancellationReason,
-                                  LastModifiedDate = f.LastModifiedDate,
-                                  HandledByUserId = f.HandledByUserId,
-                                  BookingReference = f.BookingReference,
-                                  EjszakakSzama = f.EjszakakSzama,
-                                  OrderBvin = f.OrderBvin,
-                                  Email = u.Email,
-                                  Nev = u.DisplayName
-                              }).ToList();
-
-            foglalaBindingSource.DataSource = foglalasok;
+            foglalaBindingSource.DataSource = query.ToList();
         }
 
         private void LoadDefaultUsers()
@@ -132,7 +102,6 @@
             var defaultUsers = jet2HolidayContext.Users
                 .Where(u => jet2HolidayContext.Foglalas.Any(f => f.UserId == u.UserId))
                 .OrderBy(u => u.DisplayName)
-                .Take(10)
                 .ToList();
 
             userBindingSource.DataSource = defaultUsers;
@@ -140,7 +109,7 @@
 
         private void buttonAddNewBooking_Click(object sender, EventArgs e)
         {
-            var uj = new FoglalasClass
+            var uj = new Models.Foglala
             {
                 Status = "Pending",
                 LetrehozasDatuma = DateTime.Now
@@ -157,28 +126,7 @@
 
             if (fan.ShowDialog() == DialogResult.OK)
             {
-                var entity = new Models.Foglala
-                {
-                    FoglalasId = fan.ujFoglalas.FoglalasId,
-                    UserId = fan.ujFoglalas.UserId,
-                    ProductBvin = fan.ujFoglalas.ProductBvin,
-                    Telefon = fan.ujFoglalas.Telefon,
-                    Lokacio = fan.ujFoglalas.Lokacio,
-                    ErkezesDatum = fan.ujFoglalas.ErkezesDatum,
-                    TavozasDatum = fan.ujFoglalas.TavozasDatum,
-                    VendegSzam = fan.ujFoglalas.VendegSzam,
-                    LetrehozasDatuma = fan.ujFoglalas.LetrehozasDatuma,
-                    Status = fan.ujFoglalas.Status,
-                    IsCancelled = fan.ujFoglalas.IsCancelled,
-                    CancellationReason = fan.ujFoglalas.CancellationReason,
-                    LastModifiedDate = fan.ujFoglalas.LastModifiedDate,
-                    HandledByUserId = fan.ujFoglalas.HandledByUserId,
-                    BookingReference = fan.ujFoglalas.BookingReference,
-                    EjszakakSzama = fan.ujFoglalas.EjszakakSzama,
-                    OrderBvin = fan.ujFoglalas.OrderBvin
-                };
-
-                jet2HolidayContext.Foglalas.Add(entity);
+                jet2HolidayContext.Foglalas.Add(fan.ujFoglalas);
 
                 try
                 {
@@ -198,13 +146,13 @@
 
         private void buttonEditBooking_Click(object sender, EventArgs e)
         {
-            if (foglalaBindingSource.Current is not FoglalasClass aktualis)
+            if (foglalaBindingSource.Current is not Models.Foglala aktualis)
             {
                 MessageBox.Show("Nincs kiválasztott foglalás.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
-            var szerkesztendo = new FoglalasClass
+            var szerkesztendo = new Models.Foglala
             {
                 FoglalasId = aktualis.FoglalasId,
                 UserId = aktualis.UserId,
@@ -243,21 +191,7 @@
                 return;
             }
 
-            entity.UserId = modositott.UserId;
-            entity.ProductBvin = modositott.ProductBvin;
-            entity.Telefon = modositott.Telefon;
-            entity.Lokacio = modositott.Lokacio;
-            entity.ErkezesDatum = modositott.ErkezesDatum;
-            entity.TavozasDatum = modositott.TavozasDatum;
-            entity.VendegSzam = modositott.VendegSzam;
-            entity.LetrehozasDatuma = modositott.LetrehozasDatuma;
-            entity.Status = modositott.Status;
-            entity.IsCancelled = modositott.IsCancelled;
-            entity.CancellationReason = modositott.CancellationReason;
-            entity.HandledByUserId = modositott.HandledByUserId;
-            entity.BookingReference = modositott.BookingReference;
-            entity.EjszakakSzama = modositott.EjszakakSzama;
-            entity.OrderBvin = modositott.OrderBvin;
+            jet2HolidayContext.Entry(entity).CurrentValues.SetValues(modositott);
             entity.LastModifiedDate = DateTime.Now;
 
             try
@@ -273,7 +207,7 @@
 
         private void buttonDeleteBooking_Click(object sender, EventArgs e)
         {
-            if (foglalaBindingSource.Current is not FoglalasClass kijelolt)
+            if (foglalaBindingSource.Current is not Models.Foglala kijelolt)
             {
                 MessageBox.Show("Nincs kiválasztott foglalás.", "Információ", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;

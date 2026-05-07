@@ -39,6 +39,10 @@ public partial class Foglala
 
     public Guid? OrderBvin { get; set; }
 
+    public string Nev { get; set; } = null!;
+
+    public string Email { get; set; } = null!;
+
     public virtual User? HandledByUser { get; set; }
 
     public virtual HccOrder? OrderBvinNavigation { get; set; }

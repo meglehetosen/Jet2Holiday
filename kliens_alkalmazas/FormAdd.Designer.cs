@@ -70,7 +70,7 @@
             // 
             // bindingSource1
             // 
-            bindingSource1.DataSource = typeof(FoglalasClass);
+            bindingSource1.DataSource = typeof(Models.Foglala);
             // 
             // textBox1
             // 

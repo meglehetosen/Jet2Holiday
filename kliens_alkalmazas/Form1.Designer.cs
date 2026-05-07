@@ -30,10 +30,26 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
-            foglalasIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            userIdDataGridViewTextBoxColumn = new DataGridViewComboBoxColumn();
+            foglalaBindingSource = new BindingSource(components);
             userBindingSource = new BindingSource(components);
+            hccProductBindingSource = new BindingSource(components);
+            hccOrderBindingSource = new BindingSource(components);
+            listBoxUser = new ListBox();
+            textBoxUserFilter = new TextBox();
+            label1 = new Label();
+            comboBox1 = new ComboBox();
+            label2 = new Label();
+            buttonAddNewBooking = new Button();
+            buttonEditBooking = new Button();
+            buttonDeleteBooking = new Button();
+            buttonExit = new Button();
+            Nev = new DataGridViewTextBoxColumn();
+            nevDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            emailDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            foglalasIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            userIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             productBvinDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            orderBvinDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             telefonDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             lokacioDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             erkezesDatumDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -47,24 +63,9 @@
             handledByUserIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             bookingReferenceDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ejszakakSzamaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            orderBvinDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
-            Email = new DataGridViewTextBoxColumn();
-            foglalaBindingSource = new BindingSource(components);
-            hccProductBindingSource = new BindingSource(components);
-            hccOrderBindingSource = new BindingSource(components);
-            listBoxUser = new ListBox();
-            textBoxUserFilter = new TextBox();
-            label1 = new Label();
-            comboBox1 = new ComboBox();
-            label2 = new Label();
-            buttonAddNewBooking = new Button();
-            buttonEditBooking = new Button();
-            buttonDeleteBooking = new Button();
-            buttonExit = new Button();
-            Nev = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hccOrderBindingSource).BeginInit();
             SuspendLayout();
@@ -76,15 +77,153 @@
             dataGridView1.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridView1.AutoGenerateColumns = false;
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { foglalasIdDataGridViewTextBoxColumn, userIdDataGridViewTextBoxColumn, productBvinDataGridViewTextBoxColumn, telefonDataGridViewTextBoxColumn, lokacioDataGridViewTextBoxColumn, erkezesDatumDataGridViewTextBoxColumn, tavozasDatumDataGridViewTextBoxColumn, vendegSzamDataGridViewTextBoxColumn, letrehozasDatumaDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, isCancelledDataGridViewCheckBoxColumn, cancellationReasonDataGridViewTextBoxColumn, lastModifiedDateDataGridViewTextBoxColumn, handledByUserIdDataGridViewTextBoxColumn, bookingReferenceDataGridViewTextBoxColumn, ejszakakSzamaDataGridViewTextBoxColumn, orderBvinDataGridViewTextBoxColumn, Email });
+            dataGridView1.Columns.AddRange(new DataGridViewColumn[] { nevDataGridViewTextBoxColumn, emailDataGridViewTextBoxColumn, foglalasIdDataGridViewTextBoxColumn, userIdDataGridViewTextBoxColumn, productBvinDataGridViewTextBoxColumn, orderBvinDataGridViewTextBoxColumn, telefonDataGridViewTextBoxColumn, lokacioDataGridViewTextBoxColumn, erkezesDatumDataGridViewTextBoxColumn, tavozasDatumDataGridViewTextBoxColumn, vendegSzamDataGridViewTextBoxColumn, letrehozasDatumaDataGridViewTextBoxColumn, statusDataGridViewTextBoxColumn, isCancelledDataGridViewCheckBoxColumn, cancellationReasonDataGridViewTextBoxColumn, lastModifiedDateDataGridViewTextBoxColumn, handledByUserIdDataGridViewTextBoxColumn, bookingReferenceDataGridViewTextBoxColumn, ejszakakSzamaDataGridViewTextBoxColumn });
             dataGridView1.DataSource = foglalaBindingSource;
-            dataGridView1.Location = new Point(276, 104);
-            dataGridView1.Margin = new Padding(3, 2, 3, 2);
+            dataGridView1.Location = new Point(315, 139);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.ReadOnly = true;
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(1197, 591);
+            dataGridView1.Size = new Size(1368, 788);
             dataGridView1.TabIndex = 0;
+            // 
+            // foglalaBindingSource
+            // 
+            foglalaBindingSource.DataSource = typeof(Models.Foglala);
+            // 
+            // userBindingSource
+            // 
+            userBindingSource.DataSource = typeof(Models.User);
+            // 
+            // hccProductBindingSource
+            // 
+            hccProductBindingSource.DataSource = typeof(Models.HccProduct);
+            // 
+            // hccOrderBindingSource
+            // 
+            hccOrderBindingSource.DataSource = typeof(Models.HccOrder);
+            // 
+            // listBoxUser
+            // 
+            listBoxUser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            listBoxUser.DataSource = userBindingSource;
+            listBoxUser.DisplayMember = "DisplayName";
+            listBoxUser.FormattingEnabled = true;
+            listBoxUser.Location = new Point(11, 139);
+            listBoxUser.Name = "listBoxUser";
+            listBoxUser.Size = new Size(298, 744);
+            listBoxUser.TabIndex = 1;
+            listBoxUser.ValueMember = "UserId";
+            listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
+            // 
+            // textBoxUserFilter
+            // 
+            textBoxUserFilter.Location = new Point(11, 37);
+            textBoxUserFilter.Name = "textBoxUserFilter";
+            textBoxUserFilter.Size = new Size(298, 27);
+            textBoxUserFilter.TabIndex = 2;
+            textBoxUserFilter.TextChanged += textBoxUserFilter_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 11F);
+            label1.Location = new Point(11, 11);
+            label1.Name = "label1";
+            label1.Size = new Size(178, 25);
+            label1.TabIndex = 3;
+            label1.Text = "Keresés név alapján";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(362, 37);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(218, 28);
+            comboBox1.TabIndex = 4;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F);
+            label2.Location = new Point(362, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(71, 25);
+            label2.TabIndex = 5;
+            label2.Text = "Státusz";
+            // 
+            // buttonAddNewBooking
+            // 
+            buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
+            buttonAddNewBooking.Location = new Point(795, 9);
+            buttonAddNewBooking.Name = "buttonAddNewBooking";
+            buttonAddNewBooking.Size = new Size(219, 111);
+            buttonAddNewBooking.TabIndex = 6;
+            buttonAddNewBooking.Text = "Új foglalás létrehozása";
+            buttonAddNewBooking.UseVisualStyleBackColor = true;
+            buttonAddNewBooking.Click += buttonAddNewBooking_Click;
+            // 
+            // buttonEditBooking
+            // 
+            buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditBooking.Font = new Font("Segoe UI", 11F);
+            buttonEditBooking.Location = new Point(1073, 9);
+            buttonEditBooking.Name = "buttonEditBooking";
+            buttonEditBooking.Size = new Size(222, 111);
+            buttonEditBooking.TabIndex = 7;
+            buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
+            buttonEditBooking.UseVisualStyleBackColor = true;
+            buttonEditBooking.Click += buttonEditBooking_Click;
+            // 
+            // buttonDeleteBooking
+            // 
+            buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
+            buttonDeleteBooking.Location = new Point(1354, 9);
+            buttonDeleteBooking.Name = "buttonDeleteBooking";
+            buttonDeleteBooking.Size = new Size(210, 111);
+            buttonDeleteBooking.TabIndex = 8;
+            buttonDeleteBooking.Text = "Foglalás törlése";
+            buttonDeleteBooking.UseVisualStyleBackColor = true;
+            buttonDeleteBooking.Click += buttonDeleteBooking_Click;
+            // 
+            // buttonExit
+            // 
+            buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonExit.Font = new Font("Segoe UI", 11F);
+            buttonExit.Location = new Point(83, 911);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(166, 75);
+            buttonExit.TabIndex = 9;
+            buttonExit.Text = "Kilépés";
+            buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
+            // 
+            // Nev
+            // 
+            Nev.DataPropertyName = "Nev";
+            Nev.HeaderText = "Nev";
+            Nev.MinimumWidth = 6;
+            Nev.Name = "Nev";
+            Nev.Width = 125;
+            // 
+            // nevDataGridViewTextBoxColumn
+            // 
+            nevDataGridViewTextBoxColumn.DataPropertyName = "Nev";
+            nevDataGridViewTextBoxColumn.HeaderText = "Nev";
+            nevDataGridViewTextBoxColumn.MinimumWidth = 6;
+            nevDataGridViewTextBoxColumn.Name = "nevDataGridViewTextBoxColumn";
+            nevDataGridViewTextBoxColumn.ReadOnly = true;
+            nevDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // emailDataGridViewTextBoxColumn
+            // 
+            emailDataGridViewTextBoxColumn.DataPropertyName = "Email";
+            emailDataGridViewTextBoxColumn.HeaderText = "Email";
+            emailDataGridViewTextBoxColumn.MinimumWidth = 6;
+            emailDataGridViewTextBoxColumn.Name = "emailDataGridViewTextBoxColumn";
+            emailDataGridViewTextBoxColumn.ReadOnly = true;
+            emailDataGridViewTextBoxColumn.Width = 125;
             // 
             // foglalasIdDataGridViewTextBoxColumn
             // 
@@ -93,26 +232,16 @@
             foglalasIdDataGridViewTextBoxColumn.MinimumWidth = 6;
             foglalasIdDataGridViewTextBoxColumn.Name = "foglalasIdDataGridViewTextBoxColumn";
             foglalasIdDataGridViewTextBoxColumn.ReadOnly = true;
-            foglalasIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
             foglalasIdDataGridViewTextBoxColumn.Width = 125;
             // 
             // userIdDataGridViewTextBoxColumn
             // 
             userIdDataGridViewTextBoxColumn.DataPropertyName = "UserId";
-            userIdDataGridViewTextBoxColumn.DataSource = userBindingSource;
-            userIdDataGridViewTextBoxColumn.DisplayMember = "DisplayName";
             userIdDataGridViewTextBoxColumn.HeaderText = "UserId";
             userIdDataGridViewTextBoxColumn.MinimumWidth = 6;
             userIdDataGridViewTextBoxColumn.Name = "userIdDataGridViewTextBoxColumn";
             userIdDataGridViewTextBoxColumn.ReadOnly = true;
-            userIdDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            userIdDataGridViewTextBoxColumn.SortMode = DataGridViewColumnSortMode.Automatic;
-            userIdDataGridViewTextBoxColumn.ValueMember = "UserId";
             userIdDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // userBindingSource
-            // 
-            userBindingSource.DataSource = typeof(Models.User);
             // 
             // productBvinDataGridViewTextBoxColumn
             // 
@@ -121,8 +250,16 @@
             productBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
             productBvinDataGridViewTextBoxColumn.Name = "productBvinDataGridViewTextBoxColumn";
             productBvinDataGridViewTextBoxColumn.ReadOnly = true;
-            productBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
             productBvinDataGridViewTextBoxColumn.Width = 125;
+            // 
+            // orderBvinDataGridViewTextBoxColumn
+            // 
+            orderBvinDataGridViewTextBoxColumn.DataPropertyName = "OrderBvin";
+            orderBvinDataGridViewTextBoxColumn.HeaderText = "OrderBvin";
+            orderBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
+            orderBvinDataGridViewTextBoxColumn.Name = "orderBvinDataGridViewTextBoxColumn";
+            orderBvinDataGridViewTextBoxColumn.ReadOnly = true;
+            orderBvinDataGridViewTextBoxColumn.Width = 125;
             // 
             // telefonDataGridViewTextBoxColumn
             // 
@@ -241,155 +378,11 @@
             ejszakakSzamaDataGridViewTextBoxColumn.ReadOnly = true;
             ejszakakSzamaDataGridViewTextBoxColumn.Width = 125;
             // 
-            // orderBvinDataGridViewTextBoxColumn
-            // 
-            orderBvinDataGridViewTextBoxColumn.DataPropertyName = "OrderBvin";
-            orderBvinDataGridViewTextBoxColumn.HeaderText = "OrderBvin";
-            orderBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
-            orderBvinDataGridViewTextBoxColumn.Name = "orderBvinDataGridViewTextBoxColumn";
-            orderBvinDataGridViewTextBoxColumn.ReadOnly = true;
-            orderBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
-            orderBvinDataGridViewTextBoxColumn.Width = 125;
-            // 
-            // Email
-            // 
-            Email.DataPropertyName = "Email";
-            Email.HeaderText = "Email";
-            Email.MinimumWidth = 6;
-            Email.Name = "Email";
-            Email.ReadOnly = true;
-            Email.Width = 125;
-            // 
-            // foglalaBindingSource
-            // 
-            foglalaBindingSource.DataSource = typeof(FoglalasClass);
-            // 
-            // hccProductBindingSource
-            // 
-            hccProductBindingSource.DataSource = typeof(Models.HccProduct);
-            // 
-            // hccOrderBindingSource
-            // 
-            hccOrderBindingSource.DataSource = typeof(Models.HccOrder);
-            // 
-            // listBoxUser
-            // 
-            listBoxUser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            listBoxUser.DataSource = userBindingSource;
-            listBoxUser.DisplayMember = "DisplayName";
-            listBoxUser.FormattingEnabled = true;
-            listBoxUser.ItemHeight = 15;
-            listBoxUser.Location = new Point(10, 104);
-            listBoxUser.Margin = new Padding(3, 2, 3, 2);
-            listBoxUser.Name = "listBoxUser";
-            listBoxUser.Size = new Size(261, 559);
-            listBoxUser.TabIndex = 1;
-            listBoxUser.ValueMember = "UserId";
-            listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
-            // 
-            // textBoxUserFilter
-            // 
-            textBoxUserFilter.Location = new Point(10, 28);
-            textBoxUserFilter.Margin = new Padding(3, 2, 3, 2);
-            textBoxUserFilter.Name = "textBoxUserFilter";
-            textBoxUserFilter.Size = new Size(261, 23);
-            textBoxUserFilter.TabIndex = 2;
-            textBoxUserFilter.TextChanged += textBoxUserFilter_TextChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 11F);
-            label1.Location = new Point(10, 8);
-            label1.Name = "label1";
-            label1.Size = new Size(139, 20);
-            label1.TabIndex = 3;
-            label1.Text = "Keresés név alapján";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(317, 28);
-            comboBox1.Margin = new Padding(3, 2, 3, 2);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(191, 23);
-            comboBox1.TabIndex = 4;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 11F);
-            label2.Location = new Point(317, 7);
-            label2.Name = "label2";
-            label2.Size = new Size(56, 20);
-            label2.TabIndex = 5;
-            label2.Text = "Státusz";
-            // 
-            // buttonAddNewBooking
-            // 
-            buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
-            buttonAddNewBooking.Location = new Point(696, 7);
-            buttonAddNewBooking.Margin = new Padding(3, 2, 3, 2);
-            buttonAddNewBooking.Name = "buttonAddNewBooking";
-            buttonAddNewBooking.Size = new Size(192, 83);
-            buttonAddNewBooking.TabIndex = 6;
-            buttonAddNewBooking.Text = "Új foglalás létrehozása";
-            buttonAddNewBooking.UseVisualStyleBackColor = true;
-            buttonAddNewBooking.Click += buttonAddNewBooking_Click;
-            // 
-            // buttonEditBooking
-            // 
-            buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonEditBooking.Font = new Font("Segoe UI", 11F);
-            buttonEditBooking.Location = new Point(939, 7);
-            buttonEditBooking.Margin = new Padding(3, 2, 3, 2);
-            buttonEditBooking.Name = "buttonEditBooking";
-            buttonEditBooking.Size = new Size(194, 83);
-            buttonEditBooking.TabIndex = 7;
-            buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
-            buttonEditBooking.UseVisualStyleBackColor = true;
-            buttonEditBooking.Click += buttonEditBooking_Click;
-            // 
-            // buttonDeleteBooking
-            // 
-            buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
-            buttonDeleteBooking.Location = new Point(1185, 7);
-            buttonDeleteBooking.Margin = new Padding(3, 2, 3, 2);
-            buttonDeleteBooking.Name = "buttonDeleteBooking";
-            buttonDeleteBooking.Size = new Size(184, 83);
-            buttonDeleteBooking.TabIndex = 8;
-            buttonDeleteBooking.Text = "Foglalás törlése";
-            buttonDeleteBooking.UseVisualStyleBackColor = true;
-            buttonDeleteBooking.Click += buttonDeleteBooking_Click;
-            // 
-            // buttonExit
-            // 
-            buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonExit.Font = new Font("Segoe UI", 11F);
-            buttonExit.Location = new Point(73, 683);
-            buttonExit.Margin = new Padding(3, 2, 3, 2);
-            buttonExit.Name = "buttonExit";
-            buttonExit.Size = new Size(145, 56);
-            buttonExit.TabIndex = 9;
-            buttonExit.Text = "Kilépés";
-            buttonExit.UseVisualStyleBackColor = true;
-            buttonExit.Click += buttonExit_Click;
-            // 
-            // Nev
-            // 
-            Nev.DataPropertyName = "Nev";
-            Nev.HeaderText = "Nev";
-            Nev.MinimumWidth = 6;
-            Nev.Name = "Nev";
-            Nev.Width = 125;
-            // 
             // Form1
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1476, 754);
+            ClientSize = new Size(1687, 1005);
             Controls.Add(buttonExit);
             Controls.Add(buttonDeleteBooking);
             Controls.Add(buttonEditBooking);
@@ -400,13 +393,12 @@
             Controls.Add(textBoxUserFilter);
             Controls.Add(listBoxUser);
             Controls.Add(dataGridView1);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)userBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)userBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)hccOrderBindingSource).EndInit();
             ResumeLayout(false);
@@ -429,9 +421,13 @@
         private Button buttonEditBooking;
         private Button buttonDeleteBooking;
         private Button buttonExit;
+        private DataGridViewTextBoxColumn Nev;
+        private DataGridViewTextBoxColumn nevDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn emailDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn foglalasIdDataGridViewTextBoxColumn;
-        private DataGridViewComboBoxColumn userIdDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn userIdDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn productBvinDataGridViewTextBoxColumn;
+        private DataGridViewTextBoxColumn orderBvinDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn telefonDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn lokacioDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn erkezesDatumDataGridViewTextBoxColumn;
@@ -445,8 +441,5 @@
         private DataGridViewTextBoxColumn handledByUserIdDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn bookingReferenceDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn ejszakakSzamaDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn orderBvinDataGridViewTextBoxColumn;
-        private DataGridViewTextBoxColumn Email;
-        private DataGridViewTextBoxColumn Nev;
     }
 }

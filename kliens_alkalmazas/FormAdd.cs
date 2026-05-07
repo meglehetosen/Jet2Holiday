@@ -11,6 +11,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace kliens_alkalmazas
 {
@@ -18,14 +19,14 @@ namespace kliens_alkalmazas
     {
         Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
 
-        public FoglalasClass ujFoglalas = new();
+        public Models.Foglala ujFoglalas = new();
 
-        public FormAdd(FoglalasClass uj)
+        public FormAdd(Models.Foglala uj)
         {
             InitializeComponent();
 
             this.StartPosition = FormStartPosition.CenterScreen;
-            ujFoglalas = uj ?? new FoglalasClass();
+            ujFoglalas = uj ?? new Models.Foglala();
         }
 
         private void FormAdd_Load(object sender, EventArgs e)
@@ -249,8 +250,122 @@ namespace kliens_alkalmazas
             if (formOrderBvin.ShowDialog() == DialogResult.OK)
             {
                 ujFoglalas.OrderBvin = formOrderBvin.SelectedOrder.Bvin;
+                FillBookingFieldsFromOrder(formOrderBvin.SelectedOrder);
                 bindingSource1.ResetBindings(false);
             }
+        }
+
+        private void FillBookingFieldsFromOrder(Models.HccOrder order)
+        {
+            if (!TryReadOrderCustomProperties(order.CustomProperties, out var orderData))
+            {
+                MessageBox.Show(
+                    "A kiválasztott Order CustomProperties mezőjéből nem sikerült kiolvasni a Jet2 dátum adatokat.",
+                    "Order adatok",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information);
+                return;
+            }
+
+            if (orderData.CheckInDate.HasValue)
+            {
+                ujFoglalas.ErkezesDatum = orderData.CheckInDate.Value;
+            }
+
+            if (orderData.CheckOutDate.HasValue)
+            {
+                ujFoglalas.TavozasDatum = orderData.CheckOutDate.Value;
+            }
+
+            if (orderData.GuestCount.HasValue)
+            {
+                ujFoglalas.VendegSzam = orderData.GuestCount.Value;
+            }
+
+            if (orderData.CheckInDate.HasValue && orderData.CheckOutDate.HasValue)
+            {
+                ujFoglalas.EjszakakSzama = orderData.CheckOutDate.Value.DayNumber - orderData.CheckInDate.Value.DayNumber;
+            }
+        }
+
+        private static bool TryReadOrderCustomProperties(string? customPropertiesXml, out OrderCustomProperties orderData)
+        {
+            orderData = new OrderCustomProperties();
+
+            if (string.IsNullOrWhiteSpace(customPropertiesXml))
+            {
+                return false;
+            }
+
+            try
+            {
+                var document = XDocument.Parse(customPropertiesXml);
+                var properties = document
+                    .Descendants("CustomProperty")
+                    .Select(p => new
+                    {
+                        Key = p.Element("Key")?.Value,
+                        Value = p.Element("Value")?.Value
+                    })
+                    .Where(p => !string.IsNullOrWhiteSpace(p.Key))
+                    .ToDictionary(p => p.Key!, p => p.Value, StringComparer.OrdinalIgnoreCase);
+
+                orderData.CheckInDate = ReadDateOnly(properties, "checkInUtc");
+                orderData.CheckOutDate = ReadDateOnly(properties, "checkOutUtc");
+                orderData.GuestCount = ReadInt(properties, "guestCount");
+                orderData.HotelLineCount = ReadInt(properties, "hotelLineCount");
+
+                return orderData.CheckInDate.HasValue
+                    || orderData.CheckOutDate.HasValue
+                    || orderData.GuestCount.HasValue
+                    || orderData.HotelLineCount.HasValue;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private static DateOnly? ReadDateOnly(Dictionary<string, string?> properties, string key)
+        {
+            if (!properties.TryGetValue(key, out var value) || string.IsNullOrWhiteSpace(value))
+            {
+                return null;
+            }
+
+            if (DateTimeOffset.TryParse(
+                    value,
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.AssumeUniversal | DateTimeStyles.AdjustToUniversal,
+                    out var parsedDate))
+            {
+                return DateOnly.FromDateTime(parsedDate.UtcDateTime);
+            }
+
+            return null;
+        }
+
+        private static int? ReadInt(Dictionary<string, string?> properties, string key)
+        {
+            if (!properties.TryGetValue(key, out var value))
+            {
+                return null;
+            }
+
+            return int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out var parsedInt)
+                ? parsedInt
+                : null;
+        }
+
+        private sealed class OrderCustomProperties
+        {
+            public DateOnly? CheckInDate { get; set; }
+
+            public DateOnly? CheckOutDate { get; set; }
+
+            public int? GuestCount { get; set; }
+
+            public int? HotelLineCount { get; set; }
         }
 
         private void buttonMentes_Click(object sender, EventArgs e)
@@ -259,10 +374,10 @@ namespace kliens_alkalmazas
             {
                 this.DialogResult = DialogResult.OK;
                 ujFoglalas.ProductBvin = ujFoglalas.ProductBvin == Guid.Empty ? Guid.NewGuid() : ujFoglalas.ProductBvin;
-                
+
             }
         }
 
-        
+
     }
 }
