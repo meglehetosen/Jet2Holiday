@@ -33,6 +33,8 @@ namespace kliens_alkalmazas
             buttonMentes.Click += buttonMentes_Click;
             buttonSearchProductbvin.Click += buttonSearchProductbvin_Click;
             buttonSearchOrderbvin.Click += buttonSearchOrderbvin_Click;
+            textBox5.TextChanged += BookingDate_TextChanged;
+            textBox6.TextChanged += BookingDate_TextChanged;
         }
 
         private void FormAdd_Load(object sender, EventArgs e)
@@ -52,6 +54,29 @@ namespace kliens_alkalmazas
             textBox13.Text = ujFoglalas.BookingReference ?? string.Empty;
             textBox14.Text = ujFoglalas.EjszakakSzama?.ToString() ?? string.Empty;
             checkBox1.Checked = ujFoglalas.IsCancelled;
+            UpdateEjszakakSzama();
+        }
+
+        private void BookingDate_TextChanged(object? sender, EventArgs e)
+        {
+            UpdateEjszakakSzama();
+        }
+
+        private void UpdateEjszakakSzama()
+        {
+            if (!DateOnly.TryParse(textBox5.Text.Trim(), out var erkezes) ||
+                !DateOnly.TryParse(textBox6.Text.Trim(), out var tavozas))
+            {
+                return;
+            }
+
+            var ejszakakSzama = tavozas.DayNumber - erkezes.DayNumber;
+            if (ejszakakSzama <= 0)
+            {
+                return;
+            }
+
+            textBox14.Text = ejszakakSzama.ToString(CultureInfo.InvariantCulture);
         }
 
         // REGEXEK ÉS VALIDÁLÁSOK

@@ -286,6 +286,17 @@ namespace kliens_alkalmazas
             {
                 ujFoglalas.EjszakakSzama = orderData.CheckOutDate.Value.DayNumber - orderData.CheckInDate.Value.DayNumber;
             }
+
+            var orderedProductBvin = jet2HolidayContext.HccLineItems
+                .Where(lineItem => lineItem.OrderBvin == order.Bvin)
+                .OrderBy(lineItem => lineItem.Id)
+                .Select(lineItem => lineItem.ProductId)
+                .FirstOrDefault();
+
+            if (orderedProductBvin != Guid.Empty)
+            {
+                ujFoglalas.ProductBvin = orderedProductBvin;
+            }
         }
 
         private static bool TryReadOrderCustomProperties(string? customPropertiesXml, out OrderCustomProperties orderData)
