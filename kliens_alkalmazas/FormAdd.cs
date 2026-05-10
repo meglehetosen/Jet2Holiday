@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace kliens_alkalmazas
 {
@@ -27,6 +28,7 @@ namespace kliens_alkalmazas
 
             this.StartPosition = FormStartPosition.CenterScreen;
             ujFoglalas = uj ?? new Models.Foglala();
+            buttonMentes.DialogResult = DialogResult.None;
             textBox10.Leave += ProductBvin_Leave;
         }
 
@@ -39,6 +41,20 @@ namespace kliens_alkalmazas
 
             SetLocationFromProductBvin();
             bindingSource1.DataSource = ujFoglalas;
+            SetProductTextBoxFromCurrentProduct();
+
+            comboBox1.Items.Clear();
+            comboBox1.Items.Add("Pending");
+            comboBox1.Items.Add("Confirmed");
+            comboBox1.Items.Add("Cancelled");
+            if (!string.IsNullOrEmpty(ujFoglalas.Status))
+            {
+                comboBox1.SelectedItem = ujFoglalas.Status;
+            }
+            else
+            {
+                comboBox1.SelectedIndex = 0; // Alapértelmezett státusz: Pending
+            }
         }
 
         // REGEXEK ÉS VALIDÁLÁSOK
@@ -248,6 +264,7 @@ namespace kliens_alkalmazas
                 SetLocationFromProductBvin();
 
                 bindingSource1.ResetBindings(false);
+                SetProductTextBoxFromCurrentProduct();
             }
         }
 
@@ -260,6 +277,7 @@ namespace kliens_alkalmazas
                 ujFoglalas.OrderBvin = formOrderBvin.SelectedOrder.Bvin;
                 FillBookingFieldsFromOrder(formOrderBvin.SelectedOrder);
                 bindingSource1.ResetBindings(false);
+                SetProductTextBoxFromOrder(formOrderBvin.SelectedOrder);
             }
         }
 
@@ -308,6 +326,43 @@ namespace kliens_alkalmazas
             }
         }
 
+        private void SetProductTextBoxFromOrder(Models.HccOrder order)
+        {
+            var orderedProduct = jet2HolidayContext.HccLineItems
+                .Where(lineItem => lineItem.OrderBvin == order.Bvin)
+                .OrderBy(lineItem => lineItem.Id)
+                .Select(lineItem => new { lineItem.ProductId, lineItem.ProductName })
+                .FirstOrDefault();
+
+            if (orderedProduct == null)
+            {
+                return;
+            }
+
+            ujFoglalas.ProductBvin = orderedProduct.ProductId;
+            textBox10.Text = orderedProduct.ProductName;
+            SetLocationFromProductBvin();
+        }
+
+        private void SetProductTextBoxFromCurrentProduct()
+        {
+            if (ujFoglalas.ProductBvin == Guid.Empty)
+            {
+                textBox10.Text = string.Empty;
+                return;
+            }
+
+            var productName = jet2HolidayContext.HccLineItems
+                .Where(lineItem => lineItem.ProductId == ujFoglalas.ProductBvin)
+                .OrderByDescending(lineItem => lineItem.LastUpdated)
+                .Select(lineItem => lineItem.ProductName)
+                .FirstOrDefault();
+
+            textBox10.Text = string.IsNullOrWhiteSpace(productName)
+                ? ujFoglalas.ProductBvin.ToString()
+                : productName;
+        }
+
         private string GenerateNextBookingReference()
         {
             var year = DateTime.Now.Year;
@@ -344,6 +399,7 @@ namespace kliens_alkalmazas
                 ujFoglalas.ProductBvin = productBvin;
                 SetLocationFromProductBvin();
                 bindingSource1.ResetBindings(false);
+                SetProductTextBoxFromCurrentProduct();
             }
         }
 
@@ -480,14 +536,51 @@ namespace kliens_alkalmazas
 
         private void buttonMentes_Click(object sender, EventArgs e)
         {
-            if (ValidateChildren() && !string.IsNullOrWhiteSpace(ujFoglalas.ProductBvin.ToString()))
+            bindingSource1.EndEdit();
+
+            ujFoglalas.Status = checkBox1.Text.Trim();
+            ujFoglalas.CancellationReason = textBox12.Text.Trim();
+            ujFoglalas.IsCancelled = checkBox1.Checked;
+
+            //if (!ValidateCancellationFields(out var cancellationValidationMessage))
+            //{
+            //    MessageBox.Show(cancellationValidationMessage, "Hiányzó törlési adatok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
+
+            if (ValidateChildren() && ujFoglalas.ProductBvin != Guid.Empty)
             {
                 this.DialogResult = DialogResult.OK;
-                ujFoglalas.ProductBvin = ujFoglalas.ProductBvin == Guid.Empty ? Guid.NewGuid() : ujFoglalas.ProductBvin;
 
             }
         }
 
+        //private bool ValidateCancellationFields(out string message)
+        //{
+        //    var statusIsCancelled = string.Equals(checkBox1.Text.Trim(), "Cancelled", StringComparison.OrdinalIgnoreCase);
+        //    var isCancelledChecked = checkBox1.Checked;
+        //    var hasCancellationReason = !string.IsNullOrWhiteSpace(textBox12.Text);
 
+        //    if (!statusIsCancelled && (isCancelledChecked || hasCancellationReason))
+        //    {
+        //        message = "Ha törölt/lemondott foglalást rögzítesz, a státuszt Cancelled értékre kell állítani.";
+        //        return false;
+        //    }
+
+        //    if (statusIsCancelled && !isCancelledChecked)
+        //    {
+        //        message = "Cancelled státusznál az IsCancelled jelölőnégyzetet be kell pipálni.";
+        //        return false;
+        //    }
+
+        //    if (statusIsCancelled && !hasCancellationReason)
+        //    {
+        //        message = "Cancelled státusznál a Törlés oka mezőt ki kell tölteni.";
+        //        return false;
+        //    }
+
+        //    message = string.Empty;
+        //    return true;
+        //}
     }
 }

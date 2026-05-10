@@ -47,7 +47,6 @@
             label8 = new Label();
             textBox8 = new TextBox();
             label9 = new Label();
-            textBox9 = new TextBox();
             label10 = new Label();
             textBox10 = new TextBox();
             label11 = new Label();
@@ -64,6 +63,7 @@
             buttonMentes = new Button();
             buttonNo = new Button();
             errorProvider1 = new ErrorProvider(components);
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
@@ -236,15 +236,6 @@
             label9.TabIndex = 17;
             label9.Text = "Státusz";
             // 
-            // textBox9
-            // 
-            textBox9.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            textBox9.DataBindings.Add(new Binding("Text", bindingSource1, "Status", true));
-            textBox9.Location = new Point(51, 635);
-            textBox9.Name = "textBox9";
-            textBox9.Size = new Size(244, 27);
-            textBox9.TabIndex = 16;
-            // 
             // label10
             // 
             label10.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -258,7 +249,6 @@
             // textBox10
             // 
             textBox10.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            textBox10.DataBindings.Add(new Binding("Text", bindingSource1, "ProductBvin", true));
             textBox10.Location = new Point(373, 63);
             textBox10.Name = "textBox10";
             textBox10.Size = new Size(309, 27);
@@ -403,11 +393,21 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // comboBox1
+            // 
+            comboBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(51, 637);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(151, 28);
+            comboBox1.TabIndex = 33;
+            // 
             // FormAdd
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(861, 823);
+            Controls.Add(comboBox1);
             Controls.Add(buttonNo);
             Controls.Add(buttonMentes);
             Controls.Add(buttonSearchOrderbvin);
@@ -424,7 +424,6 @@
             Controls.Add(label10);
             Controls.Add(textBox10);
             Controls.Add(label9);
-            Controls.Add(textBox9);
             Controls.Add(label8);
             Controls.Add(textBox8);
             Controls.Add(label7);
@@ -470,7 +469,6 @@
         private Label label8;
         private TextBox textBox8;
         private Label label9;
-        private TextBox textBox9;
         private Label label10;
         private TextBox textBox10;
         private Label label11;
@@ -487,5 +485,6 @@
         private Button buttonMentes;
         private Button buttonNo;
         private ErrorProvider errorProvider1;
+        private ComboBox comboBox1;
     }
 }

@@ -4,6 +4,7 @@
     {
         private const string AllStatus = "All";
         private readonly Models.Jet2HolidaySqldbContext jet2HolidayContext = new Models.Jet2HolidaySqldbContext();
+        private Dictionary<Guid, string> productNamesByBvin = new();
         public Models.Foglala? kivalasztottFoglalas;
 
         public Form1()
@@ -16,6 +17,9 @@
             hccProductBindingSource.DataSource = jet2HolidayContext.HccProducts.ToList();
 
             listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
+            dataGridView1.CellFormatting += dataGridView1_CellFormatting;
+            productBvinDataGridViewTextBoxColumn.HeaderText = "Szállás";
+            productBvinDataGridViewTextBoxColumn.Width = 220;
 
             if (listBoxUser.Items.Count > 0)
             {
@@ -78,6 +82,7 @@
         {
             if (listBoxUser.SelectedItem is not Models.User selectedUser)
             {
+                productNamesByBvin = new Dictionary<Guid, string>();
                 foglalaBindingSource.DataSource = new List<Models.Foglala>();
                 return;
             }
@@ -94,7 +99,50 @@
 
             query = query.OrderBy(f => f.FoglalasId);
 
-            foglalaBindingSource.DataSource = query.ToList();
+            var foglalasok = query.ToList();
+            RefreshProductNameCache(foglalasok);
+            foglalaBindingSource.DataSource = foglalasok;
+        }
+
+        private void RefreshProductNameCache(List<Models.Foglala> foglalasok)
+        {
+            var productBvins = foglalasok
+                .Select(f => f.ProductBvin)
+                .Where(productBvin => productBvin != Guid.Empty)
+                .Distinct()
+                .ToList();
+
+            if (productBvins.Count == 0)
+            {
+                productNamesByBvin = new Dictionary<Guid, string>();
+                return;
+            }
+
+            productNamesByBvin = jet2HolidayContext.HccLineItems
+                .Where(lineItem => productBvins.Contains(lineItem.ProductId) && lineItem.ProductName != "")
+                .AsEnumerable()
+                .GroupBy(lineItem => lineItem.ProductId)
+                .ToDictionary(
+                    group => group.Key,
+                    group => group
+                        .OrderByDescending(lineItem => lineItem.LastUpdated)
+                        .Select(lineItem => lineItem.ProductName)
+                        .First());
+        }
+
+        private void dataGridView1_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dataGridView1.Columns[e.ColumnIndex] != productBvinDataGridViewTextBoxColumn ||
+                e.Value is not Guid productBvin)
+            {
+                return;
+            }
+
+            if (productNamesByBvin.TryGetValue(productBvin, out var productName))
+            {
+                e.Value = productName;
+                e.FormattingApplied = true;
+            }
         }
 
         private void LoadDefaultUsers()
@@ -268,6 +316,12 @@
                 return;
             }
 
+            //if (!CanDeleteBooking(kijelolt, out var deleteValidationMessage))
+            //{
+            //    MessageBox.Show(deleteValidationMessage, "Törlés nem engedélyezett", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //    return;
+            //}
+
             var megerosites = MessageBox.Show(
                 $"Biztosan törlöd ezt a foglalást? (ID: {kijelolt.FoglalasId})",
                 "Megerősítés",
@@ -298,6 +352,38 @@
                 MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
+        //private bool CanDeleteBooking(Models.Foglala foglalas, out string message)
+        //{
+        //    var selectedStatus = comboBox1.SelectedItem?.ToString();
+
+        //    if (!string.Equals(selectedStatus, "Cancelled", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        message = "Törlés csak akkor engedélyezett, ha a státusz szűrő a Cancelled értékre van állítva.";
+        //        return false;
+        //    }
+
+        //    if (!string.Equals(foglalas.Status, "Cancelled", StringComparison.OrdinalIgnoreCase))
+        //    {
+        //        message = "Törlés csak Cancelled státuszú foglalásnál engedélyezett.";
+        //        return false;
+        //    }
+
+        //    if (!foglalas.IsCancelled)
+        //    {
+        //        message = "Törlés előtt az IsCancelled mezőnek bepipáltnak kell lennie.";
+        //        return false;
+        //    }
+
+        //    if (string.IsNullOrWhiteSpace(foglalas.CancellationReason))
+        //    {
+        //        message = "Törlés előtt a Törlés oka mezőt ki kell tölteni.";
+        //        return false;
+        //    }
+
+        //    message = string.Empty;
+        //    return true;
+        //}
 
         private void buttonExit_Click(object sender, EventArgs e)
         {

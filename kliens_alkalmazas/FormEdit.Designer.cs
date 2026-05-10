@@ -45,7 +45,6 @@
             label10 = new Label();
             textBox10 = new TextBox();
             label9 = new Label();
-            textBox9 = new TextBox();
             label8 = new Label();
             textBox8 = new TextBox();
             label7 = new Label();
@@ -64,6 +63,7 @@
             textBox1 = new TextBox();
             bindingSource1 = new BindingSource(components);
             errorProvider1 = new ErrorProvider(components);
+            comboBox1 = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)bindingSource1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).BeginInit();
             SuspendLayout();
@@ -222,14 +222,6 @@
             label9.TabIndex = 50;
             label9.Text = "Státusz";
             // 
-            // textBox9
-            // 
-            textBox9.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
-            textBox9.Location = new Point(28, 652);
-            textBox9.Name = "textBox9";
-            textBox9.Size = new Size(244, 27);
-            textBox9.TabIndex = 49;
-            // 
             // label8
             // 
             label8.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
@@ -378,11 +370,21 @@
             // 
             errorProvider1.ContainerControl = this;
             // 
+            // comboBox1
+            // 
+            comboBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(25, 654);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(151, 28);
+            comboBox1.TabIndex = 66;
+            // 
             // FormEdit
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(827, 830);
+            Controls.Add(comboBox1);
             Controls.Add(buttonNo);
             Controls.Add(buttonMentes);
             Controls.Add(buttonSearchOrderbvin);
@@ -399,7 +401,6 @@
             Controls.Add(label10);
             Controls.Add(textBox10);
             Controls.Add(label9);
-            Controls.Add(textBox9);
             Controls.Add(label8);
             Controls.Add(textBox8);
             Controls.Add(label7);
@@ -442,7 +443,6 @@
         private Label label10;
         private TextBox textBox10;
         private Label label9;
-        private TextBox textBox9;
         private Label label8;
         private TextBox textBox8;
         private Label label7;
@@ -461,5 +461,6 @@
         private TextBox textBox1;
         private BindingSource bindingSource1;
         private ErrorProvider errorProvider1;
+        private ComboBox comboBox1;
     }
 }

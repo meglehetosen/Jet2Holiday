@@ -30,6 +30,7 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
+            hccLineItemBindingSource = new BindingSource(components);
             foglalaBindingSource = new BindingSource(components);
             userBindingSource = new BindingSource(components);
             hccProductBindingSource = new BindingSource(components);
@@ -64,6 +65,7 @@
             bookingReferenceDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ejszakakSzamaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).BeginInit();
@@ -85,6 +87,10 @@
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(1368, 788);
             dataGridView1.TabIndex = 0;
+            // 
+            // hccLineItemBindingSource
+            // 
+            hccLineItemBindingSource.DataSource = typeof(Models.HccLineItem);
             // 
             // foglalaBindingSource
             // 
@@ -250,6 +256,7 @@
             productBvinDataGridViewTextBoxColumn.MinimumWidth = 6;
             productBvinDataGridViewTextBoxColumn.Name = "productBvinDataGridViewTextBoxColumn";
             productBvinDataGridViewTextBoxColumn.ReadOnly = true;
+            productBvinDataGridViewTextBoxColumn.Resizable = DataGridViewTriState.True;
             productBvinDataGridViewTextBoxColumn.Width = 125;
             // 
             // orderBvinDataGridViewTextBoxColumn
@@ -397,6 +404,7 @@
             Text = "Form1";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).EndInit();
@@ -422,6 +430,7 @@
         private Button buttonDeleteBooking;
         private Button buttonExit;
         private DataGridViewTextBoxColumn Nev;
+        private BindingSource hccLineItemBindingSource;
         private DataGridViewTextBoxColumn nevDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn emailDataGridViewTextBoxColumn;
         private DataGridViewTextBoxColumn foglalasIdDataGridViewTextBoxColumn;
