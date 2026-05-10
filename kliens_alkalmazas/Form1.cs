@@ -120,6 +120,7 @@
                 uj.UserId = selectedUser.UserId;
                 uj.Nev = selectedUser.DisplayName;
                 uj.Email = selectedUser.Email;
+                uj.Telefon = GetPhoneNumberForUser(selectedUser);
             }
 
             using var fan = new FormAdd(uj);
@@ -203,6 +204,60 @@
             {
                 MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private string? GetPhoneNumberForUser(Models.User selectedUser)
+        {
+            if (string.IsNullOrWhiteSpace(selectedUser.Email))
+            {
+                return null;
+            }
+
+            var hccUserBvin = jet2HolidayContext.HccUsers
+                .Where(user => user.Email == selectedUser.Email)
+                .Select(user => user.Bvin)
+                .FirstOrDefault();
+
+            if (!string.IsNullOrWhiteSpace(hccUserBvin))
+            {
+                var addressPhone = jet2HolidayContext.HccAddresses
+                    .Where(address => address.UserBvin == hccUserBvin && address.Phone != "")
+                    .OrderByDescending(address => address.LastUpdated)
+                    .Select(address => address.Phone)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(addressPhone))
+                {
+                    return addressPhone;
+                }
+
+                var hccUserPhone = jet2HolidayContext.HccUsers
+                    .Where(user => user.Bvin == hccUserBvin && user.Phones != "")
+                    .Select(user => user.Phones)
+                    .FirstOrDefault();
+
+                if (!string.IsNullOrWhiteSpace(hccUserPhone))
+                {
+                    return hccUserPhone;
+                }
+            }
+
+            var latestOrderUserBvin = jet2HolidayContext.HccOrders
+                .Where(order => order.UserEmail == selectedUser.Email)
+                .OrderByDescending(order => order.TimeOfOrder)
+                .Select(order => order.UserId)
+                .FirstOrDefault();
+
+            if (string.IsNullOrWhiteSpace(latestOrderUserBvin))
+            {
+                return null;
+            }
+
+            return jet2HolidayContext.HccAddresses
+                .Where(address => address.UserBvin == latestOrderUserBvin && address.Phone != "")
+                .OrderByDescending(address => address.LastUpdated)
+                .Select(address => address.Phone)
+                .FirstOrDefault();
         }
 
         private void buttonDeleteBooking_Click(object sender, EventArgs e)

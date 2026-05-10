@@ -35,6 +35,7 @@ namespace kliens_alkalmazas
             buttonSearchOrderbvin.Click += buttonSearchOrderbvin_Click;
             textBox5.TextChanged += BookingDate_TextChanged;
             textBox6.TextChanged += BookingDate_TextChanged;
+            textBox10.Leave += ProductBvin_Leave;
         }
 
         private void FormAdd_Load(object sender, EventArgs e)
@@ -55,6 +56,7 @@ namespace kliens_alkalmazas
             textBox14.Text = ujFoglalas.EjszakakSzama?.ToString() ?? string.Empty;
             checkBox1.Checked = ujFoglalas.IsCancelled;
             UpdateEjszakakSzama();
+            SetLocationFromProductBvin();
         }
 
         private void BookingDate_TextChanged(object? sender, EventArgs e)
@@ -77,6 +79,78 @@ namespace kliens_alkalmazas
             }
 
             textBox14.Text = ejszakakSzama.ToString(CultureInfo.InvariantCulture);
+        }
+
+        private void ProductBvin_Leave(object? sender, EventArgs e)
+        {
+            if (Guid.TryParse(textBox10.Text.Trim(), out var productBvin))
+            {
+                ujFoglalas.ProductBvin = productBvin;
+                SetLocationFromProductBvin();
+            }
+        }
+
+        private void SetLocationFromProductBvin()
+        {
+            var location = GetLocationByProductBvin(ujFoglalas.ProductBvin);
+            if (location == null)
+            {
+                return;
+            }
+
+            ujFoglalas.Lokacio = location;
+            textBox4.Text = location;
+        }
+
+        private string? GetLocationByProductBvin(Guid productBvin)
+        {
+            if (productBvin == Guid.Empty)
+            {
+                return null;
+            }
+
+            var sku = jet2HolidayContext.HccProducts
+                .Where(product => product.Bvin == productBvin)
+                .Select(product => product.Sku)
+                .FirstOrDefault();
+
+            return GetLocationBySku(sku);
+        }
+
+        private static string? GetLocationBySku(string? sku)
+        {
+            if (string.IsNullOrWhiteSpace(sku))
+            {
+                return null;
+            }
+
+            sku = sku.Trim().ToUpperInvariant();
+
+            var maldivMatch = Regex.Match(sku, @"^MALDIV-(\d{3})$");
+            if (maldivMatch.Success &&
+                int.TryParse(maldivMatch.Groups[1].Value, out var maldivNumber) &&
+                maldivNumber >= 1 && maldivNumber <= 240)
+            {
+                return "Maldív-szigetek";
+            }
+
+            var milanoMatch = Regex.Match(sku, @"^MILANO(\d{2})$");
+            if (milanoMatch.Success &&
+                int.TryParse(milanoMatch.Groups[1].Value, out var milanoNumber) &&
+                milanoNumber >= 1 && milanoNumber <= 7)
+            {
+                return "Milánó";
+            }
+
+            var isztambulMatch = Regex.Match(sku, @"^ISZTAMBUL(\d{2})$");
+            if (isztambulMatch.Success &&
+                int.TryParse(isztambulMatch.Groups[1].Value, out var isztambulNumber) &&
+                isztambulNumber >= 1 && isztambulNumber <= 6)
+            {
+                return "Isztambul";
+            }
+
+            return null;
         }
 
         // REGEXEK ÉS VALIDÁLÁSOK
@@ -283,6 +357,8 @@ namespace kliens_alkalmazas
             if (formProductBvin.ShowDialog() == DialogResult.OK)
             {
                 ujFoglalas.ProductBvin = formProductBvin.SelectedProduct.Bvin;
+                textBox10.Text = ujFoglalas.ProductBvin.ToString();
+                SetLocationFromProductBvin();
 
                 bindingSource1.ResetBindings(false);
             }

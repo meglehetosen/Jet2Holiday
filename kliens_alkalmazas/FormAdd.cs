@@ -27,10 +27,17 @@ namespace kliens_alkalmazas
 
             this.StartPosition = FormStartPosition.CenterScreen;
             ujFoglalas = uj ?? new Models.Foglala();
+            textBox10.Leave += ProductBvin_Leave;
         }
 
         private void FormAdd_Load(object sender, EventArgs e)
         {
+            if (string.IsNullOrWhiteSpace(ujFoglalas.BookingReference))
+            {
+                ujFoglalas.BookingReference = GenerateNextBookingReference();
+            }
+
+            SetLocationFromProductBvin();
             bindingSource1.DataSource = ujFoglalas;
         }
 
@@ -238,6 +245,7 @@ namespace kliens_alkalmazas
             if (formProductBvin.ShowDialog() == DialogResult.OK)
             {
                 ujFoglalas.ProductBvin = formProductBvin.SelectedProduct.Bvin;
+                SetLocationFromProductBvin();
 
                 bindingSource1.ResetBindings(false);
             }
@@ -296,7 +304,98 @@ namespace kliens_alkalmazas
             if (orderedProductBvin != Guid.Empty)
             {
                 ujFoglalas.ProductBvin = orderedProductBvin;
+                SetLocationFromProductBvin();
             }
+        }
+
+        private string GenerateNextBookingReference()
+        {
+            var year = DateTime.Now.Year;
+            var prefix = $"JH-{year}-";
+            var lastNumber = jet2HolidayContext.Foglalas
+                .Where(foglalas => foglalas.BookingReference != null && foglalas.BookingReference.StartsWith(prefix))
+                .Select(foglalas => foglalas.BookingReference!)
+                .AsEnumerable()
+                .Select(reference => Regex.Match(reference, $@"^JH-{year}-(\d{{6}})$"))
+                .Where(match => match.Success)
+                .Select(match => int.Parse(match.Groups[1].Value, CultureInfo.InvariantCulture))
+                .DefaultIfEmpty(0)
+                .Max();
+
+            return $"{prefix}{lastNumber + 1:000000}";
+        }
+
+        private void SetLocationFromProductBvin()
+        {
+            var location = GetLocationByProductBvin(ujFoglalas.ProductBvin);
+            if (location == null)
+            {
+                return;
+            }
+
+            ujFoglalas.Lokacio = location;
+            textBox4.Text = location;
+        }
+
+        private void ProductBvin_Leave(object? sender, EventArgs e)
+        {
+            if (Guid.TryParse(textBox10.Text.Trim(), out var productBvin))
+            {
+                ujFoglalas.ProductBvin = productBvin;
+                SetLocationFromProductBvin();
+                bindingSource1.ResetBindings(false);
+            }
+        }
+
+        private string? GetLocationByProductBvin(Guid productBvin)
+        {
+            if (productBvin == Guid.Empty)
+            {
+                return null;
+            }
+
+            var sku = jet2HolidayContext.HccProducts
+                .Where(product => product.Bvin == productBvin)
+                .Select(product => product.Sku)
+                .FirstOrDefault();
+
+            return GetLocationBySku(sku);
+        }
+
+        private static string? GetLocationBySku(string? sku)
+        {
+            if (string.IsNullOrWhiteSpace(sku))
+            {
+                return null;
+            }
+
+            sku = sku.Trim().ToUpperInvariant();
+
+            var maldivMatch = Regex.Match(sku, @"^MALDIV-(\d{3})$");
+            if (maldivMatch.Success &&
+                int.TryParse(maldivMatch.Groups[1].Value, out var maldivNumber) &&
+                maldivNumber >= 1 && maldivNumber <= 240)
+            {
+                return "Maldív-szigetek";
+            }
+
+            var milanoMatch = Regex.Match(sku, @"^MILANO(\d{2})$");
+            if (milanoMatch.Success &&
+                int.TryParse(milanoMatch.Groups[1].Value, out var milanoNumber) &&
+                milanoNumber >= 1 && milanoNumber <= 7)
+            {
+                return "Milánó";
+            }
+
+            var isztambulMatch = Regex.Match(sku, @"^ISZTAMBUL(\d{2})$");
+            if (isztambulMatch.Success &&
+                int.TryParse(isztambulMatch.Groups[1].Value, out var isztambulNumber) &&
+                isztambulNumber >= 1 && isztambulNumber <= 6)
+            {
+                return "Isztambul";
+            }
+
+            return null;
         }
 
         private static bool TryReadOrderCustomProperties(string? customPropertiesXml, out OrderCustomProperties orderData)
