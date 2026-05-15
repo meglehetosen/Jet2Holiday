@@ -1,4 +1,4 @@
-namespace kliens_alkalmazas_api
+﻿namespace kliens_alkalmazas_api
 {
     internal static class Program
     {
@@ -15,3 +15,4 @@ namespace kliens_alkalmazas_api
         }
     }
 }
+

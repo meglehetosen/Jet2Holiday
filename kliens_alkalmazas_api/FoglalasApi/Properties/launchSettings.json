@@ -1,0 +1,12 @@
+{
+  "profiles": {
+    "FoglalasApi": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://20.67.251.10",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
