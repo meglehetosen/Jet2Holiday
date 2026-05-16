@@ -131,7 +131,15 @@ public sealed class Jet2HolidayApiClient
             return new List<HccLineItem>();
         }
 
-        return await hotcakes.GetLineItemsByProductIdsAsync(productIds);
+        try
+        {
+            await EnsureLocalApiRunningAsync();
+            return await GetListAsync<HccLineItem>("api/lineitems?productIds=" + Uri.EscapeDataString(ids));
+        }
+        catch
+        {
+            return await hotcakes.GetLineItemsByProductIdsAsync(productIds);
+        }
     }
 
     public async Task<HccLineItem?> GetFirstLineItemForOrderAsync(Guid orderBvin)

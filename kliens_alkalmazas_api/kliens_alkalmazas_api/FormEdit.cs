@@ -115,20 +115,20 @@ namespace kliens_alkalmazas_api
             try
             {
                 UseWaitCursor = true;
-                var products = await apiClient.GetProductsAsync(ujFoglalas.ProductBvin.ToString());
-                var product = products.FirstOrDefault(p => p.Bvin == ujFoglalas.ProductBvin);
+                var lineItem = (await apiClient.GetLineItemsByProductIdsAsync(new[] { ujFoglalas.ProductBvin }))
+                    .Where(item => item.ProductId == ujFoglalas.ProductBvin && !string.IsNullOrWhiteSpace(item.ProductName))
+                    .OrderByDescending(item => item.LastUpdated)
+                    .FirstOrDefault();
 
-                if (product == null)
+                if (lineItem == null)
                 {
+                    textBox10.Text = ujFoglalas.ProductBvin.ToString();
                     return;
                 }
 
-                if (!string.IsNullOrWhiteSpace(product.ProductName))
-                {
-                    textBox10.Text = product.ProductName;
-                }
+                textBox10.Text = lineItem.ProductName;
 
-                var location = GetLocationBySku(product.Sku);
+                var location = GetLocationBySku(lineItem.ProductSku);
                 if (location != null)
                 {
                     ujFoglalas.Lokacio = location;

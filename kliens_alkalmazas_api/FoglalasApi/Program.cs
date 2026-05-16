@@ -178,7 +178,20 @@ app.MapGet("/api/lineitems", async (string? productIds, Guid? orderBvin) =>
         .Where(id => id != Guid.Empty)
         .ToHashSet();
 
-    return Results.Ok(await hotcakes.GetLineItemsAsync(ids, orderBvin));
+    var sql = """
+        SELECT Id, LastUpdated, ProductId, Quantity, OrderBvin, LineTotal,
+               ProductName, ProductSku, StatusCode, StatusName, StoreId
+        FROM dbo.hcc_LineItem
+        WHERE (@orderBvin IS NULL OR OrderBvin = @orderBvin)
+          AND (@hasProductIds = 0 OR ProductId IN (SELECT TRY_CONVERT(uniqueidentifier, value) FROM STRING_SPLIT(@productIds, ',')))
+          AND ProductName <> ''
+        ORDER BY LastUpdated DESC
+        """;
+
+    return Results.Ok(await QueryAsync(connectionString, sql, ReadLineItem,
+        Param("@orderBvin", orderBvin),
+        Param("@hasProductIds", ids.Count > 0),
+        Param("@productIds", string.Join(',', ids))));
 });
 app.Run();
 
