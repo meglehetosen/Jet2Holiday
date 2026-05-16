@@ -314,6 +314,16 @@ namespace kliens_alkalmazas_api
                 return;
             }
 
+            if (!CanDeleteFoglalas(kijelolt, out var deleteValidationMessage))
+            {
+                MessageBox.Show(
+                    deleteValidationMessage,
+                    "Torles nem engedelyezett",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
             var megerosites = MessageBox.Show(
                 $"Biztosan törlöd ezt a foglalást? (ID: {kijelolt.FoglalasId})",
                 "Megerősítés",
@@ -336,6 +346,21 @@ namespace kliens_alkalmazas_api
             {
                 MessageBox.Show(ex.Message, "Hiba", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private static bool CanDeleteFoglalas(Foglala foglalas, out string message)
+        {
+            var statusIsCancelled = string.Equals(foglalas.Status?.Trim(), "Cancelled", StringComparison.OrdinalIgnoreCase);
+            var hasCancellationReason = !string.IsNullOrWhiteSpace(foglalas.CancellationReason);
+
+            if (statusIsCancelled && foglalas.IsCancelled && hasCancellationReason)
+            {
+                message = string.Empty;
+                return true;
+            }
+
+            message = "Foglalást csak akkor lehet törölni, ha a FormEdit-ben a Status Cancelled, az IsCancelled be van pipálva, és a Törles oka mezőben van szöveg. Mentsd el először ezeket a módosításokat.";
+            return false;
         }
 
         private void buttonExit_Click(object sender, EventArgs e)

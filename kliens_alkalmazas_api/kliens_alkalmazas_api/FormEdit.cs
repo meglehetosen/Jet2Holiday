@@ -75,6 +75,12 @@ namespace kliens_alkalmazas_api
 
         private void UpdateEjszakakSzama()
         {
+            if (!ValidateCancellationFields(out var cancellationValidationMessage))
+            {
+                MessageBox.Show(cancellationValidationMessage, "Hianyzo torlesi adatok", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
             if (!DateOnly.TryParse(textBox5.Text.Trim(), out var erkezes) ||
                 !DateOnly.TryParse(textBox6.Text.Trim(), out var tavozas))
             {
@@ -557,6 +563,34 @@ namespace kliens_alkalmazas_api
 
             DialogResult = DialogResult.OK;
             Close();
+        }
+
+        private bool ValidateCancellationFields(out string message)
+        {
+            var statusIsCancelled = string.Equals(comboBox1.Text.Trim(), "Cancelled", StringComparison.OrdinalIgnoreCase);
+            var isCancelledChecked = checkBox1.Checked;
+            var hasCancellationReason = !string.IsNullOrWhiteSpace(textBox12.Text);
+
+            if (!statusIsCancelled && (isCancelledChecked || hasCancellationReason))
+            {
+                message = "Ha torolt/lemondott foglalast rogzitesz, a statuszt Cancelled ertekre kell allitani.";
+                return false;
+            }
+
+            if (statusIsCancelled && !isCancelledChecked)
+            {
+                message = "Cancelled statusznal az IsCancelled jelolonegyzetet be kell pipalni.";
+                return false;
+            }
+
+            if (statusIsCancelled && !hasCancellationReason)
+            {
+                message = "Cancelled statusznal a Torles oka mezot ki kell tolteni.";
+                return false;
+            }
+
+            message = string.Empty;
+            return true;
         }
 
         //    private bool ValidateCancellationFields(out string message)
