@@ -349,12 +349,12 @@ public sealed class HotcakesDirectClient
         sku = sku.Trim().ToUpperInvariant();
         if (System.Text.RegularExpressions.Regex.IsMatch(sku, @"^MALDIV-\d{3}$"))
         {
-            return "Maldiv-szigetek";
+            return "Maldív-szigetek";
         }
 
         if (System.Text.RegularExpressions.Regex.IsMatch(sku, @"^MILANO\d{2}$"))
         {
-            return "Milano";
+            return "Milánó";
         }
 
         if (System.Text.RegularExpressions.Regex.IsMatch(sku, @"^ISZTAMBUL\d{2}$"))

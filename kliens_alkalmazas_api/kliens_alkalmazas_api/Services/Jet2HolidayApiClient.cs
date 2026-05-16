@@ -112,10 +112,15 @@ public sealed class Jet2HolidayApiClient
             return new Dictionary<Guid, string>();
         }
 
-        return (await GetProductsAsync())
-            .Where(product => ids.Contains(product.Bvin) && !string.IsNullOrWhiteSpace(product.ProductName))
-            .GroupBy(product => product.Bvin)
-            .ToDictionary(group => group.Key, group => group.First().ProductName);
+        return (await GetLineItemsByProductIdsAsync(ids))
+            .Where(lineItem => ids.Contains(lineItem.ProductId) && !string.IsNullOrWhiteSpace(lineItem.ProductName))
+            .GroupBy(lineItem => lineItem.ProductId)
+            .ToDictionary(
+                group => group.Key,
+                group => group
+                    .OrderByDescending(lineItem => lineItem.LastUpdated)
+                    .Select(lineItem => lineItem.ProductName)
+                    .First());
     }
 
     public async Task<List<HccLineItem>> GetLineItemsByProductIdsAsync(IEnumerable<Guid> productIds)

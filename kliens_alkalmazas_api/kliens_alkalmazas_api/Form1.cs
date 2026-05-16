@@ -102,6 +102,7 @@ namespace kliens_alkalmazas_api
                     .ToList();
 
                 foglalaBindingSource.DataSource = foglalasok;
+                _ = LoadProductNamesAsync(foglalasok);
             }
             catch (Exception ex)
             {
@@ -114,37 +115,70 @@ namespace kliens_alkalmazas_api
             }
         }
 
-        private async Task LoadProductNamesAsync()
+        private async Task LoadProductNamesAsync(IEnumerable<Foglala>? source = null)
         {
-            var productBvins = allFoglalas
+            var productBvins = (source ?? allFoglalas)
                 .Select(f => f.ProductBvin)
                 .Where(productBvin => productBvin != Guid.Empty)
+                .Where(productBvin => !productNamesByBvin.ContainsKey(productBvin))
                 .Distinct()
                 .ToList();
 
+            if (productBvins.Count == 0)
+            {
+                return;
+            }
+
             try
             {
-                productNamesByBvin = await apiClient.GetProductNamesAsync(productBvins);
+                var loadedNames = await apiClient.GetProductNamesAsync(productBvins);
+                foreach (var pair in loadedNames)
+                {
+                    productNamesByBvin[pair.Key] = pair.Value;
+                }
+
                 dataGridView1.Invoke(() => dataGridView1.Refresh());
             }
             catch
             {
-                productNamesByBvin = new Dictionary<Guid, string>();
             }
         }
 
         private void dataGridView1_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dataGridView1.Columns[e.ColumnIndex] != productBvinDataGridViewTextBoxColumn ||
-                e.Value is not Guid productBvin)
-            {
-                return;
-            }
-
-            if (productNamesByBvin.TryGetValue(productBvin, out var productName))
+            if (dataGridView1.Columns[e.ColumnIndex] == productBvinDataGridViewTextBoxColumn &&
+                e.Value is Guid productBvin &&
+                productNamesByBvin.TryGetValue(productBvin, out var productName))
             {
                 e.Value = productName;
                 e.FormattingApplied = true;
+                return;
+            }
+
+            if (dataGridView1.Columns[e.ColumnIndex] == lokacioDataGridViewTextBoxColumn &&
+                e.Value is string location)
+            {
+                e.Value = NormalizeLocation(location);
+                e.FormattingApplied = true;
+            }
+        }
+
+        private static string NormalizeLocation(string location)
+        {
+            return location.Trim().ToUpperInvariant() switch
+            {
+                "MILANO" or "MILÁNÓ" => "Milánó",
+                "ISZTAMBUL" => "Isztambul",
+                "MALDIV-SZIGETEK" or "MALDÍV-SZIGETEK" => "Maldív-szigetek",
+                _ => location
+            };
+        }
+
+        private static void NormalizeFoglalasLocation(Foglala foglalas)
+        {
+            if (!string.IsNullOrWhiteSpace(foglalas.Lokacio))
+            {
+                foglalas.Lokacio = NormalizeLocation(foglalas.Lokacio);
             }
         }
 
@@ -155,6 +189,7 @@ namespace kliens_alkalmazas_api
 
             allUsers = await usersTask;
             allFoglalas = await foglalasTask;
+            allFoglalas.ForEach(NormalizeFoglalasLocation);
             ApplyUserFilter();
         }
 
@@ -198,6 +233,7 @@ namespace kliens_alkalmazas_api
                 try
                 {
                     var created = await apiClient.CreateFoglalasAsync(fan.ujFoglalas);
+                    NormalizeFoglalasLocation(created);
                     allFoglalas.Add(created);
                     ApplyUserFilter();
                     RefreshFoglalasGridBySelectedUser();
@@ -241,6 +277,7 @@ namespace kliens_alkalmazas_api
                 Email = aktualis.Email,
                 Nev = aktualis.Nev
             };
+            NormalizeFoglalasLocation(szerkesztendo);
 
             using var formEdit = new FormEdit(szerkesztendo);
 
@@ -254,6 +291,7 @@ namespace kliens_alkalmazas_api
             try
             {
                 await apiClient.UpdateFoglalasAsync(formEdit.ujFoglalas);
+                NormalizeFoglalasLocation(formEdit.ujFoglalas);
                 var index = allFoglalas.FindIndex(foglalas => foglalas.FoglalasId == formEdit.ujFoglalas.FoglalasId);
                 if (index >= 0)
                 {

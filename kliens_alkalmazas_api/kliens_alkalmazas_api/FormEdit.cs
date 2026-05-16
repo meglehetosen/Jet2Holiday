@@ -30,6 +30,7 @@ namespace kliens_alkalmazas_api
             ujFoglalas = uj ?? new Models.Foglala();
 
             Load += FormAdd_Load;
+            Shown += FormEdit_Shown;
 
             buttonMentes.DialogResult = DialogResult.None;
             buttonMentes.Click += buttonMentes_Click;
@@ -57,10 +58,14 @@ namespace kliens_alkalmazas_api
             textBox12.Text = ujFoglalas.CancellationReason ?? string.Empty;
             textBox13.Text = ujFoglalas.BookingReference ?? string.Empty;
             textBox14.Text = ujFoglalas.EjszakakSzama?.ToString() ?? string.Empty;
+            textBox10.Text = ujFoglalas.ProductBvin == Guid.Empty ? string.Empty : ujFoglalas.ProductBvin.ToString();
             checkBox1.Checked = ujFoglalas.IsCancelled;
             UpdateEjszakakSzama();
-            SetLocationFromProductBvin();
-            SetProductTextBoxFromCurrentProduct();
+        }
+
+        private async void FormEdit_Shown(object? sender, EventArgs e)
+        {
+            await LoadCurrentProductDetailsAsync();
         }
 
         private void BookingDate_TextChanged(object? sender, EventArgs e)
@@ -90,26 +95,54 @@ namespace kliens_alkalmazas_api
             ujFoglalas.EjszakakSzama = ejszakakSzama;
         }
 
-        private void ProductBvin_Leave(object? sender, EventArgs e)
+        private async void ProductBvin_Leave(object? sender, EventArgs e)
         {
             if (Guid.TryParse(textBox10.Text.Trim(), out var productBvin))
             {
                 ujFoglalas.ProductBvin = productBvin;
-                SetLocationFromProductBvin();
-                SetProductTextBoxFromCurrentProduct();
+                await LoadCurrentProductDetailsAsync();
             }
         }
 
-        private void SetLocationFromProductBvin()
+        private async Task LoadCurrentProductDetailsAsync()
         {
-            var location = GetLocationByProductBvin(ujFoglalas.ProductBvin);
-            if (location == null)
+            if (ujFoglalas.ProductBvin == Guid.Empty)
             {
+                textBox10.Text = string.Empty;
                 return;
             }
 
-            ujFoglalas.Lokacio = location;
-            textBox4.Text = location;
+            try
+            {
+                UseWaitCursor = true;
+                var products = await apiClient.GetProductsAsync(ujFoglalas.ProductBvin.ToString());
+                var product = products.FirstOrDefault(p => p.Bvin == ujFoglalas.ProductBvin);
+
+                if (product == null)
+                {
+                    return;
+                }
+
+                if (!string.IsNullOrWhiteSpace(product.ProductName))
+                {
+                    textBox10.Text = product.ProductName;
+                }
+
+                var location = GetLocationBySku(product.Sku);
+                if (location != null)
+                {
+                    ujFoglalas.Lokacio = location;
+                    textBox4.Text = location;
+                }
+            }
+            catch
+            {
+                textBox10.Text = ujFoglalas.ProductBvin.ToString();
+            }
+            finally
+            {
+                UseWaitCursor = false;
+            }
         }
 
         private async Task SetProductTextBoxFromOrderAsync(Models.HccOrder order)
@@ -174,42 +207,6 @@ namespace kliens_alkalmazas_api
             }
 
             UpdateEjszakakSzama();
-        }
-
-        private void SetProductTextBoxFromCurrentProduct()
-        {
-            if (ujFoglalas.ProductBvin == Guid.Empty)
-            {
-                textBox10.Text = string.Empty;
-                return;
-            }
-
-            var productName = apiClient.GetLineItemsByProductIdsAsync(new[] { ujFoglalas.ProductBvin })
-                .GetAwaiter()
-                .GetResult()
-                .OrderByDescending(lineItem => lineItem.LastUpdated)
-                .Select(lineItem => lineItem.ProductName)
-                .FirstOrDefault();
-
-            textBox10.Text = string.IsNullOrWhiteSpace(productName)
-                ? ujFoglalas.ProductBvin.ToString()
-                : productName;
-        }
-
-        private string? GetLocationByProductBvin(Guid productBvin)
-        {
-            if (productBvin == Guid.Empty)
-            {
-                return null;
-            }
-
-            var sku = apiClient.GetProductsAsync(productBvin.ToString())
-                .GetAwaiter()
-                .GetResult()
-                .FirstOrDefault(product => product.Bvin == productBvin)
-                ?.Sku;
-
-            return GetLocationBySku(sku);
         }
 
         private static string? GetLocationBySku(string? sku)
@@ -451,9 +448,18 @@ namespace kliens_alkalmazas_api
 
             if (formProductBvin.ShowDialog() == DialogResult.OK)
             {
-                ujFoglalas.ProductBvin = formProductBvin.SelectedProduct.Bvin;
-                SetLocationFromProductBvin();
-                SetProductTextBoxFromCurrentProduct();
+                var selectedProduct = formProductBvin.SelectedProduct;
+                ujFoglalas.ProductBvin = selectedProduct.Bvin;
+                textBox10.Text = string.IsNullOrWhiteSpace(selectedProduct.ProductName)
+                    ? selectedProduct.Bvin.ToString()
+                    : selectedProduct.ProductName;
+
+                var location = GetLocationBySku(selectedProduct.Sku);
+                if (location != null)
+                {
+                    ujFoglalas.Lokacio = location;
+                    textBox4.Text = location;
+                }
 
                 bindingSource1.ResetBindings(false);
             }
