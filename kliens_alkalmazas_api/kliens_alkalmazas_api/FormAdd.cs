@@ -30,6 +30,8 @@ namespace kliens_alkalmazas_api
             this.StartPosition = FormStartPosition.CenterScreen;
             ujFoglalas = uj ?? new Models.Foglala();
             buttonMentes.DialogResult = DialogResult.None;
+            textBox5.TextChanged += BookingDate_TextChanged;
+            textBox6.TextChanged += BookingDate_TextChanged;
             textBox10.Leave += ProductBvin_Leave;
         }
 
@@ -43,6 +45,7 @@ namespace kliens_alkalmazas_api
             SetLocationFromProductBvin();
             bindingSource1.DataSource = ujFoglalas;
             SetProductTextBoxFromCurrentProduct();
+            UpdateEjszakakSzama();
 
             comboBox1.Items.Clear();
             comboBox1.Items.Add("Pending");
@@ -56,6 +59,33 @@ namespace kliens_alkalmazas_api
             {
                 comboBox1.SelectedIndex = 0; // Alapértelmezett státusz: Pending
             }
+        }
+
+        private void BookingDate_TextChanged(object? sender, EventArgs e)
+        {
+            UpdateEjszakakSzama();
+        }
+
+        private void UpdateEjszakakSzama()
+        {
+            if (!DateOnly.TryParse(textBox5.Text.Trim(), out var erkezes) ||
+                !DateOnly.TryParse(textBox6.Text.Trim(), out var tavozas))
+            {
+                textBox14.Text = string.Empty;
+                ujFoglalas.EjszakakSzama = null;
+                return;
+            }
+
+            var ejszakakSzama = tavozas.DayNumber - erkezes.DayNumber;
+            if (ejszakakSzama <= 0)
+            {
+                textBox14.Text = string.Empty;
+                ujFoglalas.EjszakakSzama = null;
+                return;
+            }
+
+            textBox14.Text = ejszakakSzama.ToString(CultureInfo.InvariantCulture);
+            ujFoglalas.EjszakakSzama = ejszakakSzama;
         }
 
         // REGEXEK ÉS VALIDÁLÁSOK
@@ -353,6 +383,8 @@ namespace kliens_alkalmazas_api
                 ujFoglalas.EjszakakSzama = orderData.EjszakakSzama.Value;
                 textBox14.Text = orderData.EjszakakSzama.Value.ToString(CultureInfo.InvariantCulture);
             }
+
+            UpdateEjszakakSzama();
         }
 
         private void SetProductTextBoxFromCurrentProduct()
@@ -457,9 +489,10 @@ namespace kliens_alkalmazas_api
 
         private void buttonMentes_Click(object sender, EventArgs e)
         {
+            UpdateEjszakakSzama();
             bindingSource1.EndEdit();
 
-            ujFoglalas.Status = checkBox1.Text.Trim();
+            ujFoglalas.Status = comboBox1.Text.Trim();
             ujFoglalas.CancellationReason = textBox12.Text.Trim();
             ujFoglalas.IsCancelled = checkBox1.Checked;
 

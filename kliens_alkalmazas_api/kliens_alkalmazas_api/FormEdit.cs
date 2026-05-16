@@ -73,16 +73,21 @@ namespace kliens_alkalmazas_api
             if (!DateOnly.TryParse(textBox5.Text.Trim(), out var erkezes) ||
                 !DateOnly.TryParse(textBox6.Text.Trim(), out var tavozas))
             {
+                textBox14.Text = string.Empty;
+                ujFoglalas.EjszakakSzama = null;
                 return;
             }
 
             var ejszakakSzama = tavozas.DayNumber - erkezes.DayNumber;
             if (ejszakakSzama <= 0)
             {
+                textBox14.Text = string.Empty;
+                ujFoglalas.EjszakakSzama = null;
                 return;
             }
 
             textBox14.Text = ejszakakSzama.ToString(CultureInfo.InvariantCulture);
+            ujFoglalas.EjszakakSzama = ejszakakSzama;
         }
 
         private void ProductBvin_Leave(object? sender, EventArgs e)
@@ -167,6 +172,8 @@ namespace kliens_alkalmazas_api
                 ujFoglalas.EjszakakSzama = orderData.EjszakakSzama.Value;
                 textBox14.Text = orderData.EjszakakSzama.Value.ToString(CultureInfo.InvariantCulture);
             }
+
+            UpdateEjszakakSzama();
         }
 
         private void SetProductTextBoxFromCurrentProduct()
@@ -478,6 +485,8 @@ namespace kliens_alkalmazas_api
 
         private void buttonMentes_Click(object sender, EventArgs e)
         {
+            UpdateEjszakakSzama();
+
             if (!ValidateChildren())
             {
                 return;
