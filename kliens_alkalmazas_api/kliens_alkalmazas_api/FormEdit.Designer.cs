@@ -123,6 +123,7 @@
             // textBox14
             // 
             textBox14.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            textBox14.Enabled = false;
             textBox14.Location = new Point(350, 492);
             textBox14.Name = "textBox14";
             textBox14.Size = new Size(244, 27);
@@ -141,6 +142,7 @@
             // textBox13
             // 
             textBox13.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
+            textBox13.Enabled = false;
             textBox13.Location = new Point(350, 414);
             textBox13.Name = "textBox13";
             textBox13.Size = new Size(244, 27);
@@ -200,9 +202,9 @@
             label10.AutoSize = true;
             label10.Location = new Point(350, 57);
             label10.Name = "label10";
-            label10.Size = new Size(92, 20);
+            label10.Size = new Size(89, 20);
             label10.TabIndex = 52;
-            label10.Text = "Product bvin";
+            label10.Text = "Szállás neve";
             // 
             // textBox10
             // 
@@ -228,9 +230,9 @@
             label8.AutoSize = true;
             label8.Location = new Point(25, 550);
             label8.Name = "label8";
-            label8.Size = new Size(228, 20);
+            label8.Size = new Size(241, 20);
             label8.TabIndex = 48;
-            label8.Text = "Létrehozás dátuma (M/DD/YYYY)";
+            label8.Text = "Létrehozás dátuma (YYYY/MM/DD)";
             // 
             // textBox8
             // 
@@ -264,9 +266,9 @@
             label6.AutoSize = true;
             label6.Location = new Point(25, 469);
             label6.Name = "label6";
-            label6.Size = new Size(208, 20);
+            label6.Size = new Size(221, 20);
             label6.TabIndex = 44;
-            label6.Text = "Távozás dátuma (M/DD/YYYY)";
+            label6.Text = "Távozás dátuma (YYYY/MM/DD)";
             // 
             // textBox6
             // 
@@ -282,9 +284,9 @@
             label5.AutoSize = true;
             label5.Location = new Point(25, 391);
             label5.Name = "label5";
-            label5.Size = new Size(206, 20);
+            label5.Size = new Size(219, 20);
             label5.TabIndex = 42;
-            label5.Text = "Érkezés dátuma (M/DD/YYYY)";
+            label5.Text = "Érkezés dátuma (YYYY/MM/DD)";
             // 
             // label4
             // 
@@ -418,7 +420,7 @@
             Controls.Add(textBox2);
             Controls.Add(textBox1);
             Name = "FormEdit";
-            Text = "FormEdit";
+            Text = "Meglévő foglalás szerkesztése";
             ((System.ComponentModel.ISupportInitialize)bindingSource1).EndInit();
             ((System.ComponentModel.ISupportInitialize)errorProvider1).EndInit();
             ResumeLayout(false);
