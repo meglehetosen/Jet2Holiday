@@ -30,21 +30,6 @@
         {
             components = new System.ComponentModel.Container();
             dataGridView1 = new DataGridView();
-            hccLineItemBindingSource = new BindingSource(components);
-            foglalaBindingSource = new BindingSource(components);
-            userBindingSource = new BindingSource(components);
-            hccProductBindingSource = new BindingSource(components);
-            hccOrderBindingSource = new BindingSource(components);
-            listBoxUser = new ListBox();
-            textBoxUserFilter = new TextBox();
-            label1 = new Label();
-            comboBox1 = new ComboBox();
-            label2 = new Label();
-            buttonAddNewBooking = new Button();
-            buttonEditBooking = new Button();
-            buttonDeleteBooking = new Button();
-            buttonExit = new Button();
-            Nev = new DataGridViewTextBoxColumn();
             nevDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             emailDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             foglalasIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
@@ -64,9 +49,24 @@
             handledByUserIdDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             bookingReferenceDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
             ejszakakSzamaDataGridViewTextBoxColumn = new DataGridViewTextBoxColumn();
+            foglalaBindingSource = new BindingSource(components);
+            hccLineItemBindingSource = new BindingSource(components);
+            userBindingSource = new BindingSource(components);
+            hccProductBindingSource = new BindingSource(components);
+            hccOrderBindingSource = new BindingSource(components);
+            listBoxUser = new ListBox();
+            textBoxUserFilter = new TextBox();
+            label1 = new Label();
+            comboBox1 = new ComboBox();
+            label2 = new Label();
+            buttonAddNewBooking = new Button();
+            buttonEditBooking = new Button();
+            buttonDeleteBooking = new Button();
+            buttonExit = new Button();
+            Nev = new DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).BeginInit();
             ((System.ComponentModel.ISupportInitialize)hccOrderBindingSource).BeginInit();
@@ -87,131 +87,6 @@
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(1368, 788);
             dataGridView1.TabIndex = 0;
-            // 
-            // hccLineItemBindingSource
-            // 
-            hccLineItemBindingSource.DataSource = typeof(Models.HccLineItem);
-            // 
-            // foglalaBindingSource
-            // 
-            foglalaBindingSource.DataSource = typeof(Models.Foglala);
-            // 
-            // userBindingSource
-            // 
-            userBindingSource.DataSource = typeof(Models.User);
-            // 
-            // hccProductBindingSource
-            // 
-            hccProductBindingSource.DataSource = typeof(Models.HccProduct);
-            // 
-            // hccOrderBindingSource
-            // 
-            hccOrderBindingSource.DataSource = typeof(Models.HccOrder);
-            // 
-            // listBoxUser
-            // 
-            listBoxUser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
-            listBoxUser.DataSource = userBindingSource;
-            listBoxUser.DisplayMember = "DisplayName";
-            listBoxUser.FormattingEnabled = true;
-            listBoxUser.Location = new Point(11, 139);
-            listBoxUser.Name = "listBoxUser";
-            listBoxUser.Size = new Size(298, 744);
-            listBoxUser.TabIndex = 1;
-            listBoxUser.ValueMember = "UserId";
-            listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
-            // 
-            // textBoxUserFilter
-            // 
-            textBoxUserFilter.Location = new Point(11, 37);
-            textBoxUserFilter.Name = "textBoxUserFilter";
-            textBoxUserFilter.Size = new Size(298, 27);
-            textBoxUserFilter.TabIndex = 2;
-            textBoxUserFilter.TextChanged += textBoxUserFilter_TextChanged;
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 11F);
-            label1.Location = new Point(11, 11);
-            label1.Name = "label1";
-            label1.Size = new Size(178, 25);
-            label1.TabIndex = 3;
-            label1.Text = "Keresés név alapján";
-            // 
-            // comboBox1
-            // 
-            comboBox1.FormattingEnabled = true;
-            comboBox1.Location = new Point(362, 37);
-            comboBox1.Name = "comboBox1";
-            comboBox1.Size = new Size(218, 28);
-            comboBox1.TabIndex = 4;
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 11F);
-            label2.Location = new Point(362, 9);
-            label2.Name = "label2";
-            label2.Size = new Size(71, 25);
-            label2.TabIndex = 5;
-            label2.Text = "Státusz";
-            // 
-            // buttonAddNewBooking
-            // 
-            buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
-            buttonAddNewBooking.Location = new Point(795, 9);
-            buttonAddNewBooking.Name = "buttonAddNewBooking";
-            buttonAddNewBooking.Size = new Size(219, 111);
-            buttonAddNewBooking.TabIndex = 6;
-            buttonAddNewBooking.Text = "Új foglalás létrehozása";
-            buttonAddNewBooking.UseVisualStyleBackColor = true;
-            buttonAddNewBooking.Click += buttonAddNewBooking_Click;
-            // 
-            // buttonEditBooking
-            // 
-            buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonEditBooking.Font = new Font("Segoe UI", 11F);
-            buttonEditBooking.Location = new Point(1073, 9);
-            buttonEditBooking.Name = "buttonEditBooking";
-            buttonEditBooking.Size = new Size(222, 111);
-            buttonEditBooking.TabIndex = 7;
-            buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
-            buttonEditBooking.UseVisualStyleBackColor = true;
-            buttonEditBooking.Click += buttonEditBooking_Click;
-            // 
-            // buttonDeleteBooking
-            // 
-            buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
-            buttonDeleteBooking.Location = new Point(1354, 9);
-            buttonDeleteBooking.Name = "buttonDeleteBooking";
-            buttonDeleteBooking.Size = new Size(210, 111);
-            buttonDeleteBooking.TabIndex = 8;
-            buttonDeleteBooking.Text = "Foglalás törlése";
-            buttonDeleteBooking.UseVisualStyleBackColor = true;
-            buttonDeleteBooking.Click += buttonDeleteBooking_Click;
-            // 
-            // buttonExit
-            // 
-            buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
-            buttonExit.Font = new Font("Segoe UI", 11F);
-            buttonExit.Location = new Point(83, 911);
-            buttonExit.Name = "buttonExit";
-            buttonExit.Size = new Size(166, 75);
-            buttonExit.TabIndex = 9;
-            buttonExit.Text = "Kilépés";
-            buttonExit.UseVisualStyleBackColor = true;
-            buttonExit.Click += buttonExit_Click;
-            // 
-            // Nev
-            // 
-            Nev.DataPropertyName = "Nev";
-            Nev.HeaderText = "Nev";
-            Nev.MinimumWidth = 6;
-            Nev.Name = "Nev";
-            Nev.Width = 125;
             // 
             // nevDataGridViewTextBoxColumn
             // 
@@ -385,6 +260,131 @@
             ejszakakSzamaDataGridViewTextBoxColumn.ReadOnly = true;
             ejszakakSzamaDataGridViewTextBoxColumn.Width = 125;
             // 
+            // foglalaBindingSource
+            // 
+            foglalaBindingSource.DataSource = typeof(Models.Foglala);
+            // 
+            // hccLineItemBindingSource
+            // 
+            hccLineItemBindingSource.DataSource = typeof(Models.HccLineItem);
+            // 
+            // userBindingSource
+            // 
+            userBindingSource.DataSource = typeof(Models.User);
+            // 
+            // hccProductBindingSource
+            // 
+            hccProductBindingSource.DataSource = typeof(Models.HccProduct);
+            // 
+            // hccOrderBindingSource
+            // 
+            hccOrderBindingSource.DataSource = typeof(Models.HccOrder);
+            // 
+            // listBoxUser
+            // 
+            listBoxUser.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
+            listBoxUser.DataSource = userBindingSource;
+            listBoxUser.DisplayMember = "DisplayName";
+            listBoxUser.FormattingEnabled = true;
+            listBoxUser.Location = new Point(11, 139);
+            listBoxUser.Name = "listBoxUser";
+            listBoxUser.Size = new Size(298, 744);
+            listBoxUser.TabIndex = 1;
+            listBoxUser.ValueMember = "UserId";
+            listBoxUser.SelectedIndexChanged += listBoxUser_SelectedIndexChanged;
+            // 
+            // textBoxUserFilter
+            // 
+            textBoxUserFilter.Location = new Point(11, 37);
+            textBoxUserFilter.Name = "textBoxUserFilter";
+            textBoxUserFilter.Size = new Size(298, 27);
+            textBoxUserFilter.TabIndex = 2;
+            textBoxUserFilter.TextChanged += textBoxUserFilter_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 11F);
+            label1.Location = new Point(11, 11);
+            label1.Name = "label1";
+            label1.Size = new Size(178, 25);
+            label1.TabIndex = 3;
+            label1.Text = "Keresés név alapján";
+            // 
+            // comboBox1
+            // 
+            comboBox1.FormattingEnabled = true;
+            comboBox1.Location = new Point(362, 37);
+            comboBox1.Name = "comboBox1";
+            comboBox1.Size = new Size(218, 28);
+            comboBox1.TabIndex = 4;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 11F);
+            label2.Location = new Point(362, 9);
+            label2.Name = "label2";
+            label2.Size = new Size(71, 25);
+            label2.TabIndex = 5;
+            label2.Text = "Státusz";
+            // 
+            // buttonAddNewBooking
+            // 
+            buttonAddNewBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonAddNewBooking.Font = new Font("Segoe UI", 11F);
+            buttonAddNewBooking.Location = new Point(795, 9);
+            buttonAddNewBooking.Name = "buttonAddNewBooking";
+            buttonAddNewBooking.Size = new Size(219, 111);
+            buttonAddNewBooking.TabIndex = 6;
+            buttonAddNewBooking.Text = "Új foglalás létrehozása";
+            buttonAddNewBooking.UseVisualStyleBackColor = true;
+            buttonAddNewBooking.Click += buttonAddNewBooking_Click;
+            // 
+            // buttonEditBooking
+            // 
+            buttonEditBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonEditBooking.Font = new Font("Segoe UI", 11F);
+            buttonEditBooking.Location = new Point(1073, 9);
+            buttonEditBooking.Name = "buttonEditBooking";
+            buttonEditBooking.Size = new Size(222, 111);
+            buttonEditBooking.TabIndex = 7;
+            buttonEditBooking.Text = "Meglévő foglalás szerkesztése";
+            buttonEditBooking.UseVisualStyleBackColor = true;
+            buttonEditBooking.Click += buttonEditBooking_Click;
+            // 
+            // buttonDeleteBooking
+            // 
+            buttonDeleteBooking.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            buttonDeleteBooking.Font = new Font("Segoe UI", 11F);
+            buttonDeleteBooking.Location = new Point(1354, 9);
+            buttonDeleteBooking.Name = "buttonDeleteBooking";
+            buttonDeleteBooking.Size = new Size(210, 111);
+            buttonDeleteBooking.TabIndex = 8;
+            buttonDeleteBooking.Text = "Foglalás törlése";
+            buttonDeleteBooking.UseVisualStyleBackColor = true;
+            buttonDeleteBooking.Click += buttonDeleteBooking_Click;
+            // 
+            // buttonExit
+            // 
+            buttonExit.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            buttonExit.Font = new Font("Segoe UI", 11F);
+            buttonExit.Location = new Point(83, 911);
+            buttonExit.Name = "buttonExit";
+            buttonExit.Size = new Size(166, 75);
+            buttonExit.TabIndex = 9;
+            buttonExit.Text = "Kilépés";
+            buttonExit.UseVisualStyleBackColor = true;
+            buttonExit.Click += buttonExit_Click;
+            // 
+            // Nev
+            // 
+            Nev.DataPropertyName = "Nev";
+            Nev.HeaderText = "Nev";
+            Nev.MinimumWidth = 6;
+            Nev.Name = "Nev";
+            Nev.Width = 125;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -401,11 +401,11 @@
             Controls.Add(listBoxUser);
             Controls.Add(dataGridView1);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Foglalás manager";
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
-            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)foglalaBindingSource).EndInit();
+            ((System.ComponentModel.ISupportInitialize)hccLineItemBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)userBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)hccProductBindingSource).EndInit();
             ((System.ComponentModel.ISupportInitialize)hccOrderBindingSource).EndInit();
